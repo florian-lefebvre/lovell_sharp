@@ -11,7 +11,9 @@ const fixtures = require('../fixtures');
 suite('Resize dimensions', () => {
   test('Exact crop', async (t) => {
     t.plan(4);
-    const { data, info } = await sharp(fixtures.inputJpg).resize(320, 240).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(fixtures.inputJpg)
+      .resize(320, 240)
+      .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
@@ -20,7 +22,9 @@ suite('Resize dimensions', () => {
 
   test('Fixed width', async (t) => {
     t.plan(4);
-    const { data, info } = await sharp(fixtures.inputJpg).resize(320).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(fixtures.inputJpg)
+      .resize(320)
+      .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
@@ -29,7 +33,9 @@ suite('Resize dimensions', () => {
 
   test('Fixed height', async (t) => {
     t.plan(4);
-    const { data, info } = await sharp(fixtures.inputJpg).resize(null, 320).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(fixtures.inputJpg)
+      .resize(null, 320)
+      .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(392, info.width);
@@ -38,7 +44,9 @@ suite('Resize dimensions', () => {
 
   test('Identity transform', async (t) => {
     t.plan(4);
-    const { data, info } = await sharp(fixtures.inputJpg).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(fixtures.inputJpg).toBuffer({
+      resolveWithObject: true
+    });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(2725, info.width);
@@ -47,7 +55,9 @@ suite('Resize dimensions', () => {
 
   test('Upscale', async (t) => {
     t.plan(4);
-    const { data, info } = await sharp(fixtures.inputJpg).resize(3000).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(fixtures.inputJpg)
+      .resize(3000)
+      .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(3000, info.width);
@@ -98,12 +108,18 @@ suite('Resize dimensions', () => {
 
   test('Invalid width - too large', async (t) => {
     t.plan(1);
-    await t.assert.rejects(() => sharp(fixtures.inputJpg).resize(0x4000, 1).webp().toBuffer(), /Processed image is too large for the WebP format/);
+    await t.assert.rejects(
+      () => sharp(fixtures.inputJpg).resize(0x4000, 1).webp().toBuffer(),
+      /Processed image is too large for the WebP format/
+    );
   });
 
   test('Invalid height - too large', async (t) => {
     t.plan(1);
-    await t.assert.rejects(() => sharp(fixtures.inputJpg).resize(1, 0x4000).webp().toBuffer(), /Processed image is too large for the WebP format/);
+    await t.assert.rejects(
+      () => sharp(fixtures.inputJpg).resize(1, 0x4000).webp().toBuffer(),
+      /Processed image is too large for the WebP format/
+    );
   });
 
   test('Webp resize then extract large image', async (t) => {
@@ -335,7 +351,11 @@ suite('Resize dimensions', () => {
   test('Do not resize when both withoutEnlargement and withoutReduction are true', async (t) => {
     t.plan(4);
     const { data, info } = await sharp(fixtures.inputJpg)
-      .resize(320, 320, { fit: 'fill', withoutEnlargement: true, withoutReduction: true })
+      .resize(320, 320, {
+        fit: 'fill',
+        withoutEnlargement: true,
+        withoutReduction: true
+      })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('jpeg', info.format);
@@ -476,7 +496,12 @@ suite('Resize dimensions', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(150, second.info.width);
     t.assert.strictEqual(100, second.info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('resize-diff-shrink-even.jpg'), second.data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('resize-diff-shrink-even.jpg'),
+        second.data
+      )
+    );
   });
 
   test('Dimensions that result in differing odd shrinks on each axis', async (t) => {
@@ -491,7 +516,12 @@ suite('Resize dimensions', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(200, second.info.width);
     t.assert.strictEqual(133, second.info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('resize-diff-shrink-odd.jpg'), second.data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('resize-diff-shrink-odd.jpg'),
+        second.data
+      )
+    );
   });
 
   [true, false].forEach((value) => {
@@ -503,7 +533,12 @@ suite('Resize dimensions', () => {
         .toBuffer({ resolveWithObject: true });
       t.assert.strictEqual(9, info.width);
       t.assert.strictEqual(8, info.height);
-      await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('fast-shrink-on-load.png'), data));
+      await t.assert.doesNotReject(() =>
+        fixtures.assertSimilar(
+          fixtures.expected('fast-shrink-on-load.png'),
+          data
+        )
+      );
     });
   });
 
@@ -521,7 +556,9 @@ suite('Resize dimensions', () => {
         .toBuffer({ resolveWithObject: true });
       t.assert.strictEqual('jpeg', info.format);
       t.assert.strictEqual(320, info.width);
-      await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.inputJpg, data));
+      await t.assert.doesNotReject(() =>
+        fixtures.assertSimilar(fixtures.inputJpg, data)
+      );
     });
   });
 
@@ -633,9 +670,7 @@ suite('Resize dimensions', () => {
       .jpeg()
       .toBuffer();
 
-    const output = await sharp(input)
-      .resize({ width: 500 })
-      .toBuffer();
+    const output = await sharp(input).resize({ width: 500 }).toBuffer();
 
     const { width, height } = await sharp(output).metadata();
     t.assert.strictEqual(width, 500);

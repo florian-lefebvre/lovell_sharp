@@ -14,18 +14,22 @@ const fixtures = require('../fixtures');
 
 async function countDeepZoomAssertions(directory) {
   const dirents = await fs.readdir(directory, { withFileTypes: true });
-  const levels = dirents.filter((dirent) => dirent.isDirectory()).map((dirent) => dirent.name);
+  const levels = dirents
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
   let tileCount = 0;
   for (const level of levels) {
     const tiles = await fs.readdir(path.join(directory, level));
     tileCount += tiles.length;
   }
-  return 1 + levels.length + (tileCount * 8);
+  return 1 + levels.length + tileCount * 8;
 }
 
 async function assertDeepZoomTiles(t, directory, expectedSize, expectedLevels) {
   const dirents = await fs.readdir(directory, { withFileTypes: true });
-  const levels = dirents.filter((dirent) => dirent.isDirectory()).map((dirent) => dirent.name);
+  const levels = dirents
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
   t.assert.strictEqual(expectedLevels, levels.length);
 
   const tiles = [];
@@ -38,16 +42,18 @@ async function assertDeepZoomTiles(t, directory, expectedSize, expectedLevels) {
     }
   }
 
-  await Promise.all(tiles.map(async (tile) => {
-    const metadata = await sharp(tile).metadata();
-    t.assert.strictEqual('jpeg', metadata.format);
-    t.assert.strictEqual('srgb', metadata.space);
-    t.assert.strictEqual(3, metadata.channels);
-    t.assert.strictEqual(false, metadata.hasProfile);
-    t.assert.strictEqual(false, metadata.hasAlpha);
-    t.assert.ok(metadata.width <= expectedSize);
-    t.assert.ok(metadata.height <= expectedSize);
-  }));
+  await Promise.all(
+    tiles.map(async (tile) => {
+      const metadata = await sharp(tile).metadata();
+      t.assert.strictEqual('jpeg', metadata.format);
+      t.assert.strictEqual('srgb', metadata.space);
+      t.assert.strictEqual(3, metadata.channels);
+      t.assert.strictEqual(false, metadata.hasProfile);
+      t.assert.strictEqual(false, metadata.hasAlpha);
+      t.assert.ok(metadata.width <= expectedSize);
+      t.assert.ok(metadata.height <= expectedSize);
+    })
+  );
 }
 
 async function countZoomifyAssertions(directory) {
@@ -71,31 +77,49 @@ async function assertZoomifyTiles(t, directory, expectedLevels) {
   t.assert.strictEqual(maxTileLevel + 1, expectedLevels);
 }
 
-async function assertGoogleTiles(t, directory, expectedLevels, extension = 'jpg') {
+async function assertGoogleTiles(
+  t,
+  directory,
+  expectedLevels,
+  extension = 'jpg'
+) {
   const dirents = await fs.readdir(directory, { withFileTypes: true });
-  const levels = dirents.filter((dirent) => dirent.isDirectory()).map((dirent) => dirent.name);
+  const levels = dirents
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
   t.assert.strictEqual(expectedLevels, levels.length);
 
   const blankStat = await fs.stat(path.join(directory, 'blank.png'));
   t.assert.ok(blankStat.isFile());
   t.assert.ok(blankStat.size > 0);
 
-  const firstTileStat = await fs.stat(path.join(directory, '0', '0', `0.${extension}`));
+  const firstTileStat = await fs.stat(
+    path.join(directory, '0', '0', `0.${extension}`)
+  );
   t.assert.ok(firstTileStat.isFile());
   t.assert.ok(firstTileStat.size > 0);
 
-  const lastTileStat = await fs.stat(path.join(directory, (expectedLevels - 1).toString(), '0', `0.${extension}`));
+  const lastTileStat = await fs.stat(
+    path.join(directory, (expectedLevels - 1).toString(), '0', `0.${extension}`)
+  );
   t.assert.ok(lastTileStat.isFile());
   t.assert.ok(lastTileStat.size > 0);
 }
 
 async function assertTileOverlap(t, directory, tileSize) {
   const dirents = await fs.readdir(directory, { withFileTypes: true });
-  const levels = dirents.filter((dirent) => dirent.isDirectory()).map((dirent) => dirent.name).sort((a, b) => a - b);
+  const levels = dirents
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name)
+    .sort((a, b) => a - b);
   const highestLevel = levels[levels.length - 1];
   const tiles = await fs.readdir(path.join(directory, highestLevel));
   tiles.sort();
-  const squareTile = path.join(directory, highestLevel, tiles[Math.floor(tiles.length / 2)]);
+  const squareTile = path.join(
+    directory,
+    highestLevel,
+    tiles[Math.floor(tiles.length / 2)]
+  );
 
   const metadata = await sharp(squareTile).metadata();
   t.assert.ok(metadata.width > tileSize);
@@ -292,9 +316,7 @@ suite('Tile', () => {
 
   test('Valid center parameter value passes', (t) => {
     t.plan(1);
-    t.assert.doesNotThrow(
-      () => sharp().tile({ center: true })
-    );
+    t.assert.doesNotThrow(() => sharp().tile({ center: true }));
   });
 
   test('Invalid centre parameter value fails', (t) => {
@@ -325,9 +347,7 @@ suite('Tile', () => {
 
   test('Valid basename parameter value passes', (t) => {
     t.plan(1);
-    t.assert.doesNotThrow(
-      () => sharp().tile({ basename: 'pass' })
-    );
+    t.assert.doesNotThrow(() => sharp().tile({ basename: 'pass' }));
   });
 
   test('Invalid basename parameter value fails', (t) => {
@@ -342,9 +362,10 @@ suite('Tile', () => {
     test('Deep Zoom layout', async (t) => {
       const directory = fixtures.path('output.dzi_files');
       await fs.rm(directory, { recursive: true, force: true });
-      const info = await sharp(fixtures.inputJpg)
-        .toFile(fixtures.path('output.dzi'));
-      t.plan(5 + await countDeepZoomAssertions(directory));
+      const info = await sharp(fixtures.inputJpg).toFile(
+        fixtures.path('output.dzi')
+      );
+      t.plan(5 + (await countDeepZoomAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);
@@ -362,13 +383,13 @@ suite('Tile', () => {
           overlap: 16
         })
         .toFile(fixtures.path('output.512.dzi'));
-      t.plan(7 + await countDeepZoomAssertions(directory));
+      t.plan(7 + (await countDeepZoomAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);
       t.assert.strictEqual(3, info.channels);
       t.assert.strictEqual('undefined', typeof info.size);
-      await assertDeepZoomTiles(t, directory, 512 + (2 * 16), 13);
+      await assertDeepZoomTiles(t, directory, 512 + 2 * 16, 13);
       await assertTileOverlap(t, directory, 512);
     });
 
@@ -381,7 +402,7 @@ suite('Tile', () => {
           angle: 90
         })
         .toFile(fixtures.path('output.512_90.dzi'));
-      t.plan(7 + await countDeepZoomAssertions(directory));
+      t.plan(7 + (await countDeepZoomAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);
@@ -443,9 +464,12 @@ suite('Tile', () => {
           skipBlanks: 0
         })
         .toFile(fixtures.path('output.256_skip_blanks.dzi'));
-      t.plan(1 + await countDeepZoomAssertions(directory));
+      t.plan(1 + (await countDeepZoomAssertions(directory)));
       const whiteTilePath = path.join(directory, '11', '0_0.jpeg');
-      t.assert.rejects(async () => fs.access(whiteTilePath), 'Tile should not exist');
+      t.assert.rejects(
+        async () => fs.access(whiteTilePath),
+        'Tile should not exist'
+      );
       await assertDeepZoomTiles(t, directory, 256, 12);
     });
 
@@ -457,7 +481,7 @@ suite('Tile', () => {
           layout: 'zoomify'
         })
         .toFile(fixtures.path('output.zoomify.dzi'));
-      t.plan(5 + await countZoomifyAssertions(directory));
+      t.plan(5 + (await countZoomifyAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);
@@ -476,7 +500,7 @@ suite('Tile', () => {
           depth: 'one'
         })
         .toFile(directory);
-      t.plan(5 + await countZoomifyAssertions(directory));
+      t.plan(5 + (await countZoomifyAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);
@@ -495,7 +519,7 @@ suite('Tile', () => {
           depth: 'onetile'
         })
         .toFile(directory);
-      t.plan(5 + await countZoomifyAssertions(directory));
+      t.plan(5 + (await countZoomifyAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);
@@ -514,7 +538,7 @@ suite('Tile', () => {
           depth: 'onepixel'
         })
         .toFile(directory);
-      t.plan(5 + await countZoomifyAssertions(directory));
+      t.plan(5 + (await countZoomifyAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);
@@ -533,9 +557,12 @@ suite('Tile', () => {
           skipBlanks: 0
         })
         .toFile(directory);
-      t.plan(6 + await countZoomifyAssertions(directory));
+      t.plan(6 + (await countZoomifyAssertions(directory)));
       const whiteTilePath = path.join(directory, 'TileGroup0', '2-0-0.jpg');
-      t.assert.rejects(async () => fs.access(whiteTilePath), 'Tile should not exist');
+      t.assert.rejects(
+        async () => fs.access(whiteTilePath),
+        'Tile should not exist'
+      );
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2048, info.width);
       t.assert.strictEqual(1536, info.height);
@@ -704,7 +731,10 @@ suite('Tile', () => {
         })
         .toFile(directory);
       const whiteTilePath = path.join(directory, '4', '8', '0.jpg');
-      t.assert.rejects(async () => fs.access(whiteTilePath), 'Tile should not exist');
+      t.assert.rejects(
+        async () => fs.access(whiteTilePath),
+        'Tile should not exist'
+      );
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2809, info.width);
       t.assert.strictEqual(2074, info.height);
@@ -729,8 +759,13 @@ suite('Tile', () => {
       t.assert.strictEqual(3, info.channels);
       t.assert.strictEqual(undefined, info.size);
       await t.assert.doesNotReject(async () => {
-        const actual = await fs.readFile(path.join(directory, '0', '0', '0.jpg'));
-        return fixtures.assertSimilar(fixtures.expected('tile_centered.jpg'), actual);
+        const actual = await fs.readFile(
+          path.join(directory, '0', '0', '0.jpg')
+        );
+        return fixtures.assertSimilar(
+          fixtures.expected('tile_centered.jpg'),
+          actual
+        );
       });
     });
 
@@ -750,8 +785,13 @@ suite('Tile', () => {
       t.assert.strictEqual(3, info.channels);
       t.assert.strictEqual(undefined, info.size);
       await t.assert.doesNotReject(async () => {
-        const actual = await fs.readFile(path.join(directory, '0', '0', '0.jpg'));
-        return fixtures.assertSimilar(fixtures.expected('tile_centered.jpg'), actual);
+        const actual = await fs.readFile(
+          path.join(directory, '0', '0', '0.jpg')
+        );
+        return fixtures.assertSimilar(
+          fixtures.expected('tile_centered.jpg'),
+          actual
+        );
       });
     });
 
@@ -773,9 +813,14 @@ suite('Tile', () => {
       t.assert.strictEqual(3, info.channels);
       t.assert.strictEqual(undefined, info.size);
       const infoJson = require(path.join(directory, 'info.json'));
-      t.assert.strictEqual('http://iiif.io/api/image/2/context.json', infoJson['@context']);
+      t.assert.strictEqual(
+        'http://iiif.io/api/image/2/context.json',
+        infoJson['@context']
+      );
       t.assert.strictEqual(`${id}/${name}`, infoJson['@id']);
-      const stat = await fs.stat(path.join(directory, '0,0,256,256', '256,', '0', 'default.jpg'));
+      const stat = await fs.stat(
+        path.join(directory, '0,0,256,256', '256,', '0', 'default.jpg')
+      );
       t.assert.ok(stat.isFile());
       t.assert.ok(stat.size > 0);
     });
@@ -798,10 +843,15 @@ suite('Tile', () => {
       t.assert.strictEqual(3, info.channels);
       t.assert.strictEqual(undefined, info.size);
       const infoJson = require(path.join(directory, 'info.json'));
-      t.assert.strictEqual('http://iiif.io/api/image/3/context.json', infoJson['@context']);
+      t.assert.strictEqual(
+        'http://iiif.io/api/image/3/context.json',
+        infoJson['@context']
+      );
       t.assert.strictEqual('ImageService3', infoJson.type);
       t.assert.strictEqual(`${id}/${name}`, infoJson.id);
-      const stat = await fs.stat(path.join(directory, '0,0,256,256', '256,256', '0', 'default.jpg'));
+      const stat = await fs.stat(
+        path.join(directory, '0,0,256,256', '256,256', '0', 'default.jpg')
+      );
       t.assert.ok(stat.isFile());
       t.assert.ok(stat.size > 0);
     });
@@ -811,10 +861,9 @@ suite('Tile', () => {
       const extractTo = fixtures.path('output.dz.container');
       const directory = path.join(extractTo, 'output.dz.container_files');
       await fs.rm(directory, { recursive: true, force: true });
-      const info = await sharp(fixtures.inputJpg)
-        .toFile(container);
+      const info = await sharp(fixtures.inputJpg).toFile(container);
       await extractZip(container, { dir: extractTo });
-      t.plan(7 + await countDeepZoomAssertions(directory));
+      t.plan(7 + (await countDeepZoomAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);
@@ -837,7 +886,7 @@ suite('Tile', () => {
         })
         .toFile(container);
       await extractZip(container, { dir: extractTo });
-      t.plan(7 + await countDeepZoomAssertions(directory));
+      t.plan(7 + (await countDeepZoomAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);
@@ -859,7 +908,7 @@ suite('Tile', () => {
         .toBuffer({ resolveWithObject: true });
       await fs.writeFile(container, data);
       await extractZip(container, { dir: extractTo });
-      t.plan(7 + await countDeepZoomAssertions(directory));
+      t.plan(7 + (await countDeepZoomAssertions(directory)));
       t.assert.strictEqual('dz', info.format);
       t.assert.strictEqual(2725, info.width);
       t.assert.strictEqual(2225, info.height);

@@ -18,7 +18,9 @@ suite('Threshold', () => {
     t.assert.strictEqual(info.format, 'jpeg');
     t.assert.strictEqual(info.width, 320);
     t.assert.strictEqual(info.height, 240);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-1.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('threshold-1.jpg'), data)
+    );
   });
 
   test('threshold 40 jpeg', async (t) => {
@@ -30,7 +32,9 @@ suite('Threshold', () => {
     t.assert.strictEqual(info.format, 'jpeg');
     t.assert.strictEqual(info.width, 320);
     t.assert.strictEqual(info.height, 240);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-40.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('threshold-40.jpg'), data)
+    );
   });
 
   test('threshold 128', async (t) => {
@@ -42,7 +46,9 @@ suite('Threshold', () => {
     t.assert.strictEqual(info.format, 'jpeg');
     t.assert.strictEqual(info.width, 320);
     t.assert.strictEqual(info.height, 240);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-128.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('threshold-128.jpg'), data)
+    );
   });
 
   test('threshold true (=128)', async (t) => {
@@ -54,15 +60,17 @@ suite('Threshold', () => {
     t.assert.strictEqual(info.format, 'jpeg');
     t.assert.strictEqual(info.width, 320);
     t.assert.strictEqual(info.height, 240);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-128.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('threshold-128.jpg'), data)
+    );
   });
 
   test('threshold false (=0)', async (t) => {
     t.plan(1);
-    const data = await sharp(fixtures.inputJpg)
-      .threshold(false)
-      .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.inputJpg, data));
+    const data = await sharp(fixtures.inputJpg).threshold(false).toBuffer();
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.inputJpg, data)
+    );
   });
 
   test('threshold grayscale: true (=128)', async (t) => {
@@ -74,7 +82,9 @@ suite('Threshold', () => {
     t.assert.strictEqual(info.format, 'jpeg');
     t.assert.strictEqual(info.width, 320);
     t.assert.strictEqual(info.height, 240);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-128.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('threshold-128.jpg'), data)
+    );
   });
 
   test('threshold default jpeg', async (t) => {
@@ -86,7 +96,9 @@ suite('Threshold', () => {
     t.assert.strictEqual(info.format, 'jpeg');
     t.assert.strictEqual(info.width, 320);
     t.assert.strictEqual(info.height, 240);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-128.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('threshold-128.jpg'), data)
+    );
   });
 
   test('threshold default png transparency', async (t) => {
@@ -98,7 +110,12 @@ suite('Threshold', () => {
     t.assert.strictEqual(info.format, 'png');
     t.assert.strictEqual(info.width, 320);
     t.assert.strictEqual(info.height, 240);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-128-transparency.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('threshold-128-transparency.png'),
+        data
+      )
+    );
   });
 
   test('threshold default png alpha', async (t) => {
@@ -110,7 +127,9 @@ suite('Threshold', () => {
     t.assert.strictEqual(info.format, 'png');
     t.assert.strictEqual(info.width, 320);
     t.assert.strictEqual(info.height, 240);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-128-alpha.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('threshold-128-alpha.png'), data)
+    );
   });
 
   test('threshold default webp transparency', async (t) => {
@@ -119,7 +138,12 @@ suite('Threshold', () => {
       .threshold()
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(info.format, 'webp');
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-128-transparency.webp'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('threshold-128-transparency.webp'),
+        data
+      )
+    );
   });
 
   test('color threshold', async (t) => {
@@ -131,7 +155,9 @@ suite('Threshold', () => {
     t.assert.strictEqual(info.format, 'jpeg');
     t.assert.strictEqual(info.width, 320);
     t.assert.strictEqual(info.height, 240);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('threshold-color-128.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('threshold-color-128.jpg'), data)
+    );
   });
 
   test('invalid threshold -1', (t) => {

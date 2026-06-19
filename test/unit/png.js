@@ -40,7 +40,10 @@ suite('PNG', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, largerBuffer.data.length > 0);
     t.assert.strictEqual('png', largerBuffer.info.format);
-    t.assert.strictEqual(true, defaultBuffer.data.length < largerBuffer.data.length);
+    t.assert.strictEqual(
+      true,
+      defaultBuffer.data.length < largerBuffer.data.length
+    );
   });
 
   test('without adaptiveFiltering generates smaller file', async (t) => {
@@ -61,11 +64,17 @@ suite('PNG', () => {
       .png({ adaptiveFiltering: false })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, withoutAdaptiveBuffer.data.length > 0);
-    t.assert.strictEqual(withoutAdaptiveBuffer.data.length, withoutAdaptiveBuffer.info.size);
+    t.assert.strictEqual(
+      withoutAdaptiveBuffer.data.length,
+      withoutAdaptiveBuffer.info.size
+    );
     t.assert.strictEqual('png', withoutAdaptiveBuffer.info.format);
     t.assert.strictEqual(320, withoutAdaptiveBuffer.info.width);
     t.assert.strictEqual(240, withoutAdaptiveBuffer.info.height);
-    t.assert.strictEqual(true, withoutAdaptiveBuffer.data.length < adaptiveBuffer.data.length);
+    t.assert.strictEqual(
+      true,
+      withoutAdaptiveBuffer.data.length < adaptiveBuffer.data.length
+    );
   });
 
   test('Invalid PNG adaptiveFiltering value throws error', (t) => {
@@ -82,7 +91,10 @@ suite('PNG', () => {
       .png({ progressive: false })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, nonProgressiveBuffer.data.length > 0);
-    t.assert.strictEqual(nonProgressiveBuffer.data.length, nonProgressiveBuffer.info.size);
+    t.assert.strictEqual(
+      nonProgressiveBuffer.data.length,
+      nonProgressiveBuffer.info.size
+    );
     t.assert.strictEqual('png', nonProgressiveBuffer.info.format);
     t.assert.strictEqual(320, nonProgressiveBuffer.info.width);
     t.assert.strictEqual(240, nonProgressiveBuffer.info.height);
@@ -90,8 +102,14 @@ suite('PNG', () => {
       .png({ progressive: true })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, progressiveBuffer.data.length > 0);
-    t.assert.strictEqual(progressiveBuffer.data.length, progressiveBuffer.info.size);
-    t.assert.strictEqual(true, progressiveBuffer.data.length > nonProgressiveBuffer.data.length);
+    t.assert.strictEqual(
+      progressiveBuffer.data.length,
+      progressiveBuffer.info.size
+    );
+    t.assert.strictEqual(
+      true,
+      progressiveBuffer.data.length > nonProgressiveBuffer.data.length
+    );
     t.assert.strictEqual('png', progressiveBuffer.info.format);
     t.assert.strictEqual(320, progressiveBuffer.info.width);
     t.assert.strictEqual(240, progressiveBuffer.info.height);
@@ -100,10 +118,12 @@ suite('PNG', () => {
   test('16-bit grey+alpha PNG identity transform', async (t) => {
     t.plan(1);
     const actual = fixtures.path('output.16-bit-grey-alpha-identity.png');
-    await sharp(fixtures.inputPng16BitGreyAlpha)
-      .toFile(actual);
+    await sharp(fixtures.inputPng16BitGreyAlpha).toFile(actual);
     t.assert.doesNotThrow(() => {
-      fixtures.assertMaxColourDistance(actual, fixtures.expected('16-bit-grey-alpha-identity.png'));
+      fixtures.assertMaxColourDistance(
+        actual,
+        fixtures.expected('16-bit-grey-alpha-identity.png')
+      );
     });
   });
 
@@ -118,8 +138,7 @@ suite('PNG', () => {
         sharp(fixtures.inputPng16BitGreyAlpha).stats(),
         sharp(after).stats()
       ])
-    )
-      .map(stats => stats.channels[1].mean);
+    ).map((stats) => stats.channels[1].mean);
 
     t.assert.strictEqual(alphaMeanAfter, alphaMeanBefore);
   });
@@ -171,8 +190,14 @@ suite('PNG', () => {
     t.plan(1);
     const inputPngBuffer = await fs.readFile(fixtures.inputPng);
     const data = await Promise.all([
-      sharp(inputPngBuffer).resize(10).png({ effort: 1, quality: 80 }).toBuffer(),
-      sharp(inputPngBuffer).resize(10).png({ effort: 1, quality: 100 }).toBuffer()
+      sharp(inputPngBuffer)
+        .resize(10)
+        .png({ effort: 1, quality: 80 })
+        .toBuffer(),
+      sharp(inputPngBuffer)
+        .resize(10)
+        .png({ effort: 1, quality: 100 })
+        .toBuffer()
     ]);
     t.assert.strictEqual(true, data[0].length <= data[1].length);
   });
@@ -219,14 +244,18 @@ suite('PNG', () => {
     t.plan(4);
     const data = await sharp({
       create: {
-        width: 8, height: 8, channels: 3, background: 'red'
+        width: 8,
+        height: 8,
+        channels: 3,
+        background: 'red'
       }
     })
       .toColourspace('b-w')
       .png({ colours: 2, palette: false })
       .toBuffer();
 
-    const { channels, isPalette, bitsPerSample, space } = await sharp(data).metadata();
+    const { channels, isPalette, bitsPerSample, space } =
+      await sharp(data).metadata();
     t.assert.strictEqual(channels, 1);
     t.assert.strictEqual(isPalette, false);
     t.assert.strictEqual(bitsPerSample, 1);

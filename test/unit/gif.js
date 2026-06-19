@@ -40,7 +40,9 @@ suite('GIF input', () => {
 
   test('Animated GIF first page to non-animated GIF', async (t) => {
     t.plan(8);
-    const { data, info } = await sharp(fixtures.inputGifAnimated).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(fixtures.inputGifAnimated).toBuffer({
+      resolveWithObject: true
+    });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual(data.length, info.size);
     t.assert.strictEqual('gif', info.format);
@@ -53,7 +55,9 @@ suite('GIF input', () => {
 
   test('Animated GIF round trip', async (t) => {
     t.plan(8);
-    const { data, info } = await sharp(fixtures.inputGifAnimated, { pages: -1 }).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(fixtures.inputGifAnimated, {
+      pages: -1
+    }).toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual(data.length, info.size);
     t.assert.strictEqual('gif', info.format);
@@ -103,8 +107,12 @@ suite('GIF input', () => {
 
   test('progressive changes file size', async (t) => {
     t.plan(1);
-    const nonProgressive = await sharp(fixtures.inputGif).gif({ progressive: false }).toBuffer();
-    const progressive = await sharp(fixtures.inputGif).gif({ progressive: true }).toBuffer();
+    const nonProgressive = await sharp(fixtures.inputGif)
+      .gif({ progressive: false })
+      .toBuffer();
+    const progressive = await sharp(fixtures.inputGif)
+      .gif({ progressive: true })
+      .toBuffer();
     t.assert.ok(nonProgressive.length !== progressive.length);
   });
 
@@ -225,8 +233,8 @@ suite('GIF input', () => {
     t.plan(2);
     const writable = sharp({ pages: -1 }).gif();
     const fd = await fs.open(fixtures.inputGifAnimated);
-    fd.createReadStream().pipe(writable)
-    const { data, info } = await writable.toBuffer({ resolveWithObject: true })
+    fd.createReadStream().pipe(writable);
+    const { data, info } = await writable.toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('gif', info.format);
     await fixtures.assertSimilar(fixtures.inputGifAnimated, data);
@@ -266,10 +274,7 @@ suite('GIF input', () => {
   test('non-animated input defaults to no-loop', async (t) => {
     t.plan(6);
     for (const input of [fixtures.inputGif, fixtures.inputPng]) {
-      const data = await sharp(input)
-        .resize(8)
-        .gif({ effort: 1 })
-        .toBuffer();
+      const data = await sharp(input).resize(8).gif({ effort: 1 }).toBuffer();
 
       const { format, pages, loop } = await sharp(data).metadata();
       t.assert.strictEqual('gif', format);

@@ -17,7 +17,11 @@ suite('Gamma correction', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(129, info.width);
     t.assert.strictEqual(111, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('gamma-0.0.jpg'), data, { threshold: 9 }));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('gamma-0.0.jpg'), data, {
+        threshold: 9
+      })
+    );
   });
 
   test('value of 2.2 (default)', async (t) => {
@@ -29,7 +33,9 @@ suite('Gamma correction', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(129, info.width);
     t.assert.strictEqual(111, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('gamma-2.2.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('gamma-2.2.jpg'), data)
+    );
   });
 
   test('value of 3.0', async (t) => {
@@ -41,7 +47,11 @@ suite('Gamma correction', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(129, info.width);
     t.assert.strictEqual(111, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('gamma-3.0.jpg'), data, { threshold: 6 }));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('gamma-3.0.jpg'), data, {
+        threshold: 6
+      })
+    );
   });
 
   test('input value of 2.2, output value of 3.0', async (t) => {
@@ -53,7 +63,13 @@ suite('Gamma correction', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(129, info.width);
     t.assert.strictEqual(111, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('gamma-in-2.2-out-3.0.jpg'), data, { threshold: 6 }));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('gamma-in-2.2-out-3.0.jpg'),
+        data,
+        { threshold: 6 }
+      )
+    );
   });
 
   test('alpha transparency', async (t) => {
@@ -65,7 +81,9 @@ suite('Gamma correction', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('gamma-alpha.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('gamma-alpha.jpg'), data)
+    );
   });
 
   test('invalid first parameter value', (t) => {

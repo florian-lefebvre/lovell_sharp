@@ -19,7 +19,9 @@ suite('Linear adjustment', () => {
     const data = await sharp(fixtures.inputJpgWithLowContrast)
       .linear(a, b)
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('low-contrast-linear.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('low-contrast-linear.jpg'), data)
+    );
   });
 
   test('applies slope level adjustment w/o alpha ch', async (t) => {
@@ -27,7 +29,9 @@ suite('Linear adjustment', () => {
     const data = await sharp(fixtures.inputJpgWithLowContrast)
       .linear(a)
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('low-contrast-slope.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('low-contrast-slope.jpg'), data)
+    );
   });
 
   test('applies offset level adjustment w/o alpha ch', async (t) => {
@@ -35,7 +39,9 @@ suite('Linear adjustment', () => {
     const data = await sharp(fixtures.inputJpgWithLowContrast)
       .linear(null, b)
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('low-contrast-offset.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('low-contrast-offset.jpg'), data)
+    );
   });
 
   test('applies linear levels adjustment w alpha ch', async (t) => {
@@ -44,7 +50,12 @@ suite('Linear adjustment', () => {
       .resize(240)
       .linear(a, b)
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('alpha-layer-1-fill-linear.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('alpha-layer-1-fill-linear.png'),
+        data
+      )
+    );
   });
 
   test('applies linear levels adjustment to 16-bit w alpha ch', async (t) => {
@@ -53,7 +64,9 @@ suite('Linear adjustment', () => {
       .linear(a, b)
       .png({ compressionLevel: 0 })
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('linear-16bit.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('linear-16bit.png'), data)
+    );
   });
 
   test('applies slope level adjustment w alpha ch', async (t) => {
@@ -62,7 +75,12 @@ suite('Linear adjustment', () => {
       .resize(240)
       .linear(a)
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('alpha-layer-1-fill-slope.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('alpha-layer-1-fill-slope.png'),
+        data
+      )
+    );
   });
 
   test('applies offset level adjustment w alpha ch', async (t) => {
@@ -71,7 +89,12 @@ suite('Linear adjustment', () => {
       .resize(240)
       .linear(null, b)
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('alpha-layer-1-fill-offset.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('alpha-layer-1-fill-offset.png'),
+        data
+      )
+    );
   });
 
   test('per channel level adjustment', async (t) => {
@@ -79,12 +102,16 @@ suite('Linear adjustment', () => {
     const data = await sharp(fixtures.inputWebP)
       .linear([0.25, 0.5, 0.75], [150, 100, 50])
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('linear-per-channel.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('linear-per-channel.jpg'), data)
+    );
   });
 
   test('output is integer, not float, RGB', async (t) => {
     t.plan(2);
-    const data = await sharp({ create: { width: 1, height: 1, channels: 3, background: 'red' } })
+    const data = await sharp({
+      create: { width: 1, height: 1, channels: 3, background: 'red' }
+    })
       .linear(1, 0)
       .tiff({ compression: 'none' })
       .toBuffer();
@@ -96,7 +123,9 @@ suite('Linear adjustment', () => {
 
   test('output is integer, not float, RGBA', async (t) => {
     t.plan(2);
-    const data = await sharp({ create: { width: 1, height: 1, channels: 4, background: '#ff000077' } })
+    const data = await sharp({
+      create: { width: 1, height: 1, channels: 4, background: '#ff000077' }
+    })
       .linear(1, 0)
       .tiff({ compression: 'none' })
       .toBuffer();

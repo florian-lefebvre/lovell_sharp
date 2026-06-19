@@ -17,42 +17,47 @@ export default defineConfig({
         alt: '#'
       },
       customCss: ['./src/styles/custom.css'],
-      head: [{
-        tag: 'meta',
-        attrs: {
-          'http-equiv': 'Content-Security-Policy',
-          content: "default-src 'self'; connect-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com/beacon.min.js/;"
-        }
-      }, {
-        tag: 'link',
-        attrs: {
-          rel: 'author',
-          href: '/humans.txt',
-          type: 'text/plain'
-        }
-      }, {
-        tag: 'script',
-        attrs: {
-          type: 'application/ld+json'
+      head: [
+        {
+          tag: 'meta',
+          attrs: {
+            'http-equiv': 'Content-Security-Policy',
+            content:
+              "default-src 'self'; connect-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com/beacon.min.js/;"
+          }
         },
-        content: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'SoftwareSourceCode',
-          name: 'sharp',
-          description: 'High performance Node.js image processing',
-          url: 'https://sharp.pixelplumbing.com',
-          codeRepository: 'https://github.com/lovell/sharp',
-          programmingLanguage: ['JavaScript', 'C++'],
-          runtimePlatform: 'Node.js',
-          copyrightHolder: {
-            '@context': 'https://schema.org',
-            '@type': 'Person',
-            name: 'Lovell Fuller'
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'author',
+            href: '/humans.txt',
+            type: 'text/plain'
+          }
+        },
+        {
+          tag: 'script',
+          attrs: {
+            type: 'application/ld+json'
           },
-          copyrightYear: 2013,
-          license: 'https://www.apache.org/licenses/LICENSE-2.0'
-        })
-      }],
+          content: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareSourceCode',
+            name: 'sharp',
+            description: 'High performance Node.js image processing',
+            url: 'https://sharp.pixelplumbing.com',
+            codeRepository: 'https://github.com/lovell/sharp',
+            programmingLanguage: ['JavaScript', 'C++'],
+            runtimePlatform: 'Node.js',
+            copyrightHolder: {
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: 'Lovell Fuller'
+            },
+            copyrightYear: 2013,
+            license: 'https://www.apache.org/licenses/LICENSE-2.0'
+          })
+        }
+      ],
       sidebar: [
         { label: 'Home', link: '/' },
         { label: 'Installation', slug: 'install' },
@@ -78,8 +83,16 @@ export default defineConfig({
         }
       ],
       social: [
-        { icon: 'openCollective', label: 'Open Collective', href: 'https://opencollective.com/libvips' },
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/lovell/sharp' }
+        {
+          icon: 'openCollective',
+          label: 'Open Collective',
+          href: 'https://opencollective.com/libvips'
+        },
+        {
+          icon: 'github',
+          label: 'GitHub',
+          href: 'https://github.com/lovell/sharp'
+        }
       ],
       plugins: [starlightAutoSidebar()]
     })

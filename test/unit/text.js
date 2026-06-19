@@ -59,7 +59,10 @@ suite('Text to image', () => {
     t.assert.strictEqual(3, info.channels);
     t.assert.ok(inRange(info.width, 400, 600), `Actual width ${info.width}`);
     t.assert.ok(inRange(info.height, 290, 500), `Actual height ${info.height}`);
-    t.assert.ok(inRange(info.textAutofitDpi, 900, 1300), `Actual textAutofitDpi ${info.textAutofitDpi}`);
+    t.assert.ok(
+      inRange(info.textAutofitDpi, 900, 1300),
+      `Actual textAutofitDpi ${info.textAutofitDpi}`
+    );
   });
 
   test('text with dpi', async (t) => {
@@ -129,31 +132,34 @@ suite('Text to image', () => {
     const dpi = 300;
     const text = sharp(fixtures.inputJpg)
       .resize(width)
-      .composite([{
-        input: {
-          text: {
-            text: '<span foreground="#ffff00">Watermark</span> <span foreground="white"><i>is cool</i></span>',
-            width: 300,
-            height: 300,
-            justify: true,
-            align: 'right',
-            spacing: 50,
-            rgba: true
-          }
+      .composite([
+        {
+          input: {
+            text: {
+              text: '<span foreground="#ffff00">Watermark</span> <span foreground="white"><i>is cool</i></span>',
+              width: 300,
+              height: 300,
+              justify: true,
+              align: 'right',
+              spacing: 50,
+              rgba: true
+            }
+          },
+          gravity: 'northeast'
         },
-        gravity: 'northeast'
-      }, {
-        input: {
-          text: {
-            text: '<span background="cyan">cool</span>',
-            font: 'sans 30',
-            dpi,
-            rgba: true
-          }
-        },
-        left: 30,
-        top: 250
-      }]);
+        {
+          input: {
+            text: {
+              text: '<span background="cyan">cool</span>',
+              font: 'sans 30',
+              dpi,
+              rgba: true
+            }
+          },
+          left: 30,
+          top: 250
+        }
+      ]);
     if (!sharp.versions.pango) {
       return t.skip();
     }
@@ -327,8 +333,12 @@ suite('Text to image', () => {
 
   test('valid wrap throws', (t) => {
     t.plan(2);
-    t.assert.doesNotThrow(() => sharp({ text: { text: 'text', wrap: 'none' } }));
-    t.assert.doesNotThrow(() => sharp({ text: { text: 'text', wrap: 'word-char' } }));
+    t.assert.doesNotThrow(() =>
+      sharp({ text: { text: 'text', wrap: 'none' } })
+    );
+    t.assert.doesNotThrow(() =>
+      sharp({ text: { text: 'text', wrap: 'word-char' } })
+    );
   });
 
   test('invalid wrap throws', (t) => {

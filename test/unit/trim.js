@@ -56,22 +56,26 @@ suite('Trim borders', () => {
     t.assert.strictEqual(info.channels, 4);
     t.assert.strictEqual(info.trimOffsetLeft, -2);
     t.assert.strictEqual(info.trimOffsetTop, -2);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('trim-16bit-rgba.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('trim-16bit-rgba.png'), data)
+    );
   });
 
   test('Attempt to trim 2x2 pixel image fails', async (t) => {
     t.plan(1);
-    await t.assert.rejects(() => sharp({
-      create: {
-        width: 2,
-        height: 2,
-        channels: 3,
-        background: 'red'
-      }
-    })
-      .trim()
-      .toBuffer(),
-    /Image to trim must be at least 3x3 pixels/
+    await t.assert.rejects(
+      () =>
+        sharp({
+          create: {
+            width: 2,
+            height: 2,
+            channels: 3,
+            background: 'red'
+          }
+        })
+          .trim()
+          .toBuffer(),
+      /Image to trim must be at least 3x3 pixels/
     );
   });
 
@@ -102,10 +106,10 @@ suite('Trim borders', () => {
 
   test('Animated image rejects', async (t) => {
     t.plan(1);
-    await t.assert.rejects(() => sharp(fixtures.inputGifAnimated, { animated: true })
-      .trim()
-      .toBuffer(),
-    /Trim is not supported for multi-page images/
+    await t.assert.rejects(
+      () =>
+        sharp(fixtures.inputGifAnimated, { animated: true }).trim().toBuffer(),
+      /Trim is not supported for multi-page images/
     );
   });
 
@@ -231,7 +235,7 @@ suite('Trim borders', () => {
   });
 
   suite('Specific background colour', () => {
-    test('Doesn\'t trim at all', async (t) => {
+    test("Doesn't trim at all", async (t) => {
       t.plan(4);
       const { info } = await sharp(fixtures.inputPngTrimSpecificColour)
         .trim({
@@ -278,7 +282,9 @@ suite('Trim borders', () => {
 
     test('Only trims the bottom, including alpha', async (t) => {
       t.plan(4);
-      const { info } = await sharp(fixtures.inputPngTrimSpecificColourIncludeAlpha)
+      const { info } = await sharp(
+        fixtures.inputPngTrimSpecificColourIncludeAlpha
+      )
         .trim({
           background: '#21468B80'
         })

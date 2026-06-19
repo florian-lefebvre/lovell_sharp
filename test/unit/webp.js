@@ -38,42 +38,64 @@ suite('WebP', () => {
 
   test('should work for webp alpha quality', async (t) => {
     t.plan(3);
-    const { data, info } = await sharp(fixtures.inputPngAlphaPremultiplicationSmall)
+    const { data, info } = await sharp(
+      fixtures.inputPngAlphaPremultiplicationSmall
+    )
       .webp({ alphaQuality: 80, effort: 0 })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('webp', info.format);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('webp-alpha-80.webp'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('webp-alpha-80.webp'), data)
+    );
   });
 
   test('should work for webp lossless', async (t) => {
     t.plan(3);
-    const { data, info } = await sharp(fixtures.inputPngAlphaPremultiplicationSmall)
+    const { data, info } = await sharp(
+      fixtures.inputPngAlphaPremultiplicationSmall
+    )
       .webp({ lossless: true, effort: 0 })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('webp', info.format);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('webp-lossless.webp'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('webp-lossless.webp'), data)
+    );
   });
 
   test('should work for webp near-lossless', async (t) => {
     t.plan(3);
-    const { data, info } = await sharp(fixtures.inputPngAlphaPremultiplicationSmall)
+    const { data, info } = await sharp(
+      fixtures.inputPngAlphaPremultiplicationSmall
+    )
       .webp({ nearLossless: true, quality: 50, effort: 0 })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('webp', info.format);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('webp-near-lossless-50.webp'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('webp-near-lossless-50.webp'),
+        data
+      )
+    );
   });
 
   test('should use near-lossless when both lossless and nearLossless are specified', async (t) => {
     t.plan(3);
-    const { data, info } = await sharp(fixtures.inputPngAlphaPremultiplicationSmall)
+    const { data, info } = await sharp(
+      fixtures.inputPngAlphaPremultiplicationSmall
+    )
       .webp({ nearLossless: true, quality: 50, lossless: true, effort: 0 })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('webp', info.format);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('webp-near-lossless-50.webp'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('webp-near-lossless-50.webp'),
+        data
+      )
+    );
   });
 
   test('should produce a larger file size using smartSubsample', async (t) => {
@@ -86,7 +108,10 @@ suite('WebP', () => {
       .resize(320, 240)
       .webp({ smartSubsample: true })
       .toBuffer();
-    t.assert.strictEqual(true, withSmartSubsample.length > withoutSmartSubsample.length);
+    t.assert.strictEqual(
+      true,
+      withSmartSubsample.length > withoutSmartSubsample.length
+    );
   });
 
   test('invalid smartSubsample throws', (t) => {
@@ -106,7 +131,10 @@ suite('WebP', () => {
       .resize(320, 240)
       .webp({ quality: 30, smartDeblock: true })
       .toBuffer();
-    t.assert.strictEqual(true, withSmartDeblock.length !== withoutSmartDeblock.length);
+    t.assert.strictEqual(
+      true,
+      withSmartDeblock.length !== withoutSmartDeblock.length
+    );
   });
 
   test('invalid smartDeblock throws', (t) => {
@@ -155,7 +183,9 @@ suite('WebP', () => {
     t.plan(1);
     const [shrunk, resized] = await Promise.all([
       sharp(fixtures.inputWebP).resize({ width: 16 }).toBuffer(),
-      sharp(fixtures.inputWebP).resize({ width: 16, fastShrinkOnLoad: false, kernel: 'nearest' }).toBuffer()
+      sharp(fixtures.inputWebP)
+        .resize({ width: 16, fastShrinkOnLoad: false, kernel: 'nearest' })
+        .toBuffer()
     ]);
     t.assert.notStrictEqual(shrunk.length, resized.length);
   });
@@ -222,17 +252,17 @@ suite('WebP', () => {
 
   test('saving exact pixel colour values produces larger file size', async (t) => {
     t.plan(1);
-    const withExact = await
-      sharp(fixtures.inputPngAlphaPremultiplicationSmall)
-        .resize(8, 8)
-        .webp({ exact: true, effort: 0 })
-        .toBuffer();
+    const withExact = await sharp(fixtures.inputPngAlphaPremultiplicationSmall)
+      .resize(8, 8)
+      .webp({ exact: true, effort: 0 })
+      .toBuffer();
 
-    const withoutExact = await
-      sharp(fixtures.inputPngAlphaPremultiplicationSmall)
-        .resize(8, 8)
-        .webp({ exact: false, effort: 0 })
-        .toBuffer()
+    const withoutExact = await sharp(
+      fixtures.inputPngAlphaPremultiplicationSmall
+    )
+      .resize(8, 8)
+      .webp({ exact: false, effort: 0 })
+      .toBuffer();
 
     t.assert.strictEqual(true, withExact.length > withoutExact.length);
   });
@@ -281,7 +311,9 @@ suite('WebP', () => {
 
   test('should change delay between frames', async (t) => {
     t.plan(1);
-    const original = await sharp(fixtures.inputWebPAnimated, { pages: -1 }).metadata();
+    const original = await sharp(fixtures.inputWebPAnimated, {
+      pages: -1
+    }).metadata();
 
     const expectedDelay = [...Array(original.pages).fill(40)];
     const data = await sharp(fixtures.inputWebPAnimated, { pages: -1 })
@@ -299,18 +331,28 @@ suite('WebP', () => {
       .toBuffer();
     const updated = await sharp(data, { pages: -1 }).metadata();
 
-    t.assert.deepStrictEqual(updated.delay, [120, 120, 90, 120, 120, 90, 120, 90, 30]);
+    t.assert.deepStrictEqual(
+      updated.delay,
+      [120, 120, 90, 120, 120, 90, 120, 90, 30]
+    );
   });
 
   test('should work with streams when only animated is set', async (t) => {
     t.plan(3);
-    const writeable = sharp({ animated: true }).webp({ lossless: true, effort: 0 });
+    const writeable = sharp({ animated: true }).webp({
+      lossless: true,
+      effort: 0
+    });
     const fd = await fs.open(fixtures.inputWebPAnimated);
     fd.createReadStream().pipe(writeable);
-    const { data, info } = await writeable.toBuffer({ resolveWithObject: true });
+    const { data, info } = await writeable.toBuffer({
+      resolveWithObject: true
+    });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('webp', info.format);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.inputWebPAnimated, data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.inputWebPAnimated, data)
+    );
   });
 
   test('should work with streams when only pages is set', async (t) => {
@@ -318,10 +360,14 @@ suite('WebP', () => {
     const writeable = sharp({ pages: -1 }).webp({ lossless: true, effort: 0 });
     const fd = await fs.open(fixtures.inputWebPAnimated);
     fd.createReadStream().pipe(writeable);
-    const { data, info } = await writeable.toBuffer({ resolveWithObject: true });
+    const { data, info } = await writeable.toBuffer({
+      resolveWithObject: true
+    });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual('webp', info.format);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.inputWebPAnimated, data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.inputWebPAnimated, data)
+    );
   });
 
   test('should resize animated image to page height', async (t) => {
@@ -338,7 +384,10 @@ suite('WebP', () => {
 
   test('should take page parameter into account when animated is set', async (t) => {
     t.plan(2);
-    const data = await sharp(fixtures.inputWebPAnimated, { animated: true, page: 2 })
+    const data = await sharp(fixtures.inputWebPAnimated, {
+      animated: true,
+      page: 2
+    })
       .resize({ height: 570 })
       .webp({ effort: 0 })
       .toBuffer();

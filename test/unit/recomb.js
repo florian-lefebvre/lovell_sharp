@@ -24,11 +24,13 @@ suite('Recomb', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(600, info.width);
     t.assert.strictEqual(450, info.height);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(
-      output,
-      fixtures.expected('Landscape_1-recomb-sepia.jpg'),
-      17
-    ));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('Landscape_1-recomb-sepia.jpg'),
+        17
+      )
+    );
   });
 
   test('applies a sepia filter using recomb to an PNG with Alpha', async (t) => {
@@ -40,11 +42,13 @@ suite('Recomb', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(1024, info.width);
     t.assert.strictEqual(768, info.height);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(
-      output,
-      fixtures.expected('alpha-recomb-sepia.png'),
-      17
-    ));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('alpha-recomb-sepia.png'),
+        17
+      )
+    );
   });
 
   test('recomb with a single channel input', async (t) => {
@@ -75,11 +79,13 @@ suite('Recomb', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(600, info.width);
     t.assert.strictEqual(450, info.height);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(
-      output,
-      fixtures.expected('Landscape_1-recomb-sepia2.jpg'),
-      17
-    ));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('Landscape_1-recomb-sepia2.jpg'),
+        17
+      )
+    );
   });
   test('increases the saturation of the image', async (t) => {
     t.plan(4);
@@ -107,11 +113,13 @@ suite('Recomb', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(600, info.width);
     t.assert.strictEqual(450, info.height);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(
-      output,
-      fixtures.expected('Landscape_1-recomb-saturation.jpg'),
-      37
-    ));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('Landscape_1-recomb-saturation.jpg'),
+        37
+      )
+    );
   });
 
   test('applies opacity 30% to the image', async (t) => {
@@ -128,11 +136,13 @@ suite('Recomb', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(48, info.width);
     t.assert.strictEqual(48, info.height);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(
-      output,
-      fixtures.expected('d-opacity-30.png'),
-      17
-    ));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('d-opacity-30.png'),
+        17
+      )
+    );
   });
 
   suite('invalid matrix specification', () => {
@@ -161,13 +171,20 @@ suite('Recomb', () => {
     test('incorrect top size', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg).recomb([[1, 2, 3, 4], [5, 6, 7, 8]]);
+        sharp(fixtures.inputJpg).recomb([
+          [1, 2, 3, 4],
+          [5, 6, 7, 8]
+        ]);
       });
     });
     test('non-numeric entries', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg).recomb([['a', 'b', 'c'], [1, 2, 3], [4, 5, 6]]);
+        sharp(fixtures.inputJpg).recomb([
+          ['a', 'b', 'c'],
+          [1, 2, 3],
+          [4, 5, 6]
+        ]);
       });
     });
   });

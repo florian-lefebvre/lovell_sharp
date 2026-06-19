@@ -175,20 +175,24 @@ suite('Modulate', () => {
   });
 
   suite('hue-rotate', () => {
-    [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360].forEach(angle => {
-      test(`should hue rotate by ${angle} deg`, async (t) => {
-        t.plan(1);
-        const base = `modulate-hue-angle-${angle}.png`;
-        const actual = fixtures.path(`output.${base}`);
-        const expected = fixtures.expected(base);
+    [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360].forEach(
+      (angle) => {
+        test(`should hue rotate by ${angle} deg`, async (t) => {
+          t.plan(1);
+          const base = `modulate-hue-angle-${angle}.png`;
+          const actual = fixtures.path(`output.${base}`);
+          const expected = fixtures.expected(base);
 
-        await sharp(fixtures.testPattern)
-          .resize(320)
-          .modulate({ hue: angle })
-          .png({ compressionLevel: 0 })
-          .toFile(actual);
-        await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(actual, expected, 3));
-      });
-    });
+          await sharp(fixtures.testPattern)
+            .resize(320)
+            .modulate({ hue: angle })
+            .png({ compressionLevel: 0 })
+            .toFile(actual);
+          await t.assert.doesNotThrow(() =>
+            fixtures.assertMaxColourDistance(actual, expected, 3)
+          );
+        });
+      }
+    );
   });
 });

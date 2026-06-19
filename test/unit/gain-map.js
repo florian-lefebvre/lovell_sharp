@@ -14,7 +14,7 @@ suite('Gain maps', () => {
     t.plan(4);
 
     const { format, gainMap } = await sharp(
-      fixtures.inputJpgWithGainMap,
+      fixtures.inputJpgWithGainMap
     ).metadata();
     t.assert.strictEqual(format, 'jpeg');
     t.assert.strictEqual(typeof gainMap, 'object');
@@ -41,7 +41,7 @@ suite('Gain maps', () => {
       depth,
       space,
       hasProfile,
-      chromaSubsampling,
+      chromaSubsampling
     } = await sharp(metadata.gainMap.image).metadata();
 
     t.assert.deepEqual(
@@ -53,7 +53,7 @@ suite('Gain maps', () => {
         depth,
         space,
         hasProfile,
-        chromaSubsampling,
+        chromaSubsampling
       },
       {
         format: 'jpeg',
@@ -63,8 +63,8 @@ suite('Gain maps', () => {
         depth: 'uchar',
         space: 'b-w',
         hasProfile: true,
-        chromaSubsampling: '4:4:4',
-      },
+        chromaSubsampling: '4:4:4'
+      }
     );
   });
 
@@ -88,7 +88,7 @@ suite('Gain maps', () => {
       depth,
       space,
       hasProfile,
-      chromaSubsampling,
+      chromaSubsampling
     } = await sharp(metadata.gainMap.image).metadata();
 
     t.assert.deepEqual(
@@ -100,7 +100,7 @@ suite('Gain maps', () => {
         depth,
         space,
         hasProfile,
-        chromaSubsampling,
+        chromaSubsampling
       },
       {
         format: 'jpeg',
@@ -110,8 +110,8 @@ suite('Gain maps', () => {
         depth: 'uchar',
         space: 'b-w',
         hasProfile: false,
-        chromaSubsampling: '4:4:4',
-      },
+        chromaSubsampling: '4:4:4'
+      }
     );
   });
 
@@ -119,9 +119,7 @@ suite('Gain maps', () => {
     t.plan(4);
 
     const outputPath = fixtures.path('output-with-gain-map.jpg');
-    await sharp(fixtures.inputJpgWithGainMap)
-      .keepGainMap()
-      .toFile(outputPath);
+    await sharp(fixtures.inputJpgWithGainMap).keepGainMap().toFile(outputPath);
 
     const metadata = await sharp(outputPath).metadata();
     t.assert.strictEqual(metadata.format, 'jpeg');
@@ -136,7 +134,7 @@ suite('Gain maps', () => {
       depth,
       space,
       hasProfile,
-      chromaSubsampling,
+      chromaSubsampling
     } = await sharp(metadata.gainMap.image).metadata();
 
     t.assert.deepEqual(
@@ -148,7 +146,7 @@ suite('Gain maps', () => {
         depth,
         space,
         hasProfile,
-        chromaSubsampling,
+        chromaSubsampling
       },
       {
         format: 'jpeg',
@@ -158,8 +156,8 @@ suite('Gain maps', () => {
         depth: 'uchar',
         space: 'b-w',
         hasProfile: false,
-        chromaSubsampling: '4:4:4',
-      },
+        chromaSubsampling: '4:4:4'
+      }
     );
   });
 
@@ -184,7 +182,7 @@ suite('Gain maps', () => {
       depth,
       space,
       hasProfile,
-      chromaSubsampling,
+      chromaSubsampling
     } = await sharp(metadata.gainMap.image).metadata();
 
     t.assert.deepEqual(
@@ -196,7 +194,7 @@ suite('Gain maps', () => {
         depth,
         space,
         hasProfile,
-        chromaSubsampling,
+        chromaSubsampling
       },
       {
         format: 'jpeg',
@@ -206,8 +204,8 @@ suite('Gain maps', () => {
         depth: 'uchar',
         space: 'b-w',
         hasProfile: false,
-        chromaSubsampling: '4:4:4',
-      },
+        chromaSubsampling: '4:4:4'
+      }
     );
   });
 

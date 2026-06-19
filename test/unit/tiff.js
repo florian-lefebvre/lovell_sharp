@@ -28,13 +28,18 @@ suite('TIFF', () => {
 
   test('Load multi-page TIFF from file', async (t) => {
     t.plan(8);
-    const { data: defaultData, info: defaultInfo } = await sharp(fixtures.inputTiffMultipage) // defaults to page 0
+    const { data: defaultData, info: defaultInfo } = await sharp(
+      fixtures.inputTiffMultipage
+    ) // defaults to page 0
       .jpeg()
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, defaultData.length > 0);
     t.assert.strictEqual(defaultData.length, defaultInfo.size);
     t.assert.strictEqual('jpeg', defaultInfo.format);
-    const { data: scaledData, info: scaledInfo } = await sharp(fixtures.inputTiffMultipage, { page: 1 }) // 50%-scale copy of page 0
+    const { data: scaledData, info: scaledInfo } = await sharp(
+      fixtures.inputTiffMultipage,
+      { page: 1 }
+    ) // 50%-scale copy of page 0
       .jpeg()
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, scaledData.length > 0);
@@ -47,13 +52,18 @@ suite('TIFF', () => {
   test('Load multi-page TIFF from Buffer', async (t) => {
     t.plan(8);
     const inputTiffBuffer = await fs.readFile(fixtures.inputTiffMultipage);
-    const { data: defaultData, info: defaultInfo } = await sharp(inputTiffBuffer) // defaults to page 0
+    const { data: defaultData, info: defaultInfo } = await sharp(
+      inputTiffBuffer
+    ) // defaults to page 0
       .jpeg()
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, defaultData.length > 0);
     t.assert.strictEqual(defaultData.length, defaultInfo.size);
     t.assert.strictEqual('jpeg', defaultInfo.format);
-    const { data: scaledData, info: scaledInfo } = await sharp(inputTiffBuffer, { page: 1 }) // 50%-scale copy of page 0
+    const { data: scaledData, info: scaledInfo } = await sharp(
+      inputTiffBuffer,
+      { page: 1 }
+    ) // 50%-scale copy of page 0
       .jpeg()
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, scaledData.length > 0);
@@ -129,7 +139,7 @@ suite('TIFF', () => {
       })
       .toFile(outputTiff);
     t.assert.strictEqual('tiff', info.format);
-    t.assert.ok(info.size < (start.size / 2));
+    t.assert.ok(info.size < start.size / 2);
     await fs.rm(outputTiff);
   });
 
@@ -149,8 +159,7 @@ suite('TIFF', () => {
         yres: 1000
       })
       .toFile(outputTiff);
-    const { density } = await sharp(outputTiff)
-      .metadata();
+    const { density } = await sharp(outputTiff).metadata();
     t.assert.strictEqual(25400, density);
     return await fs.rm(outputTiff);
   });
@@ -164,8 +173,7 @@ suite('TIFF', () => {
         yres: 1000
       })
       .toBuffer();
-    const { density } = await sharp(data)
-      .metadata();
+    const { density } = await sharp(data).metadata();
     t.assert.strictEqual(25400, density);
   });
 
@@ -271,7 +279,9 @@ suite('TIFF', () => {
 
   test('TIFF resolutionUnit of inch (default)', async (t) => {
     t.plan(1);
-    const data = await sharp({ create: { width: 8, height: 8, channels: 3, background: 'red' } })
+    const data = await sharp({
+      create: { width: 8, height: 8, channels: 3, background: 'red' }
+    })
       .tiff()
       .toBuffer();
     const { resolutionUnit } = await sharp(data).metadata();
@@ -280,7 +290,9 @@ suite('TIFF', () => {
 
   test('TIFF resolutionUnit of inch', async (t) => {
     t.plan(1);
-    const data = await sharp({ create: { width: 8, height: 8, channels: 3, background: 'red' } })
+    const data = await sharp({
+      create: { width: 8, height: 8, channels: 3, background: 'red' }
+    })
       .tiff({ resolutionUnit: 'inch' })
       .toBuffer();
     const { resolutionUnit } = await sharp(data).metadata();
@@ -289,7 +301,9 @@ suite('TIFF', () => {
 
   test('TIFF resolutionUnit of cm', async (t) => {
     t.plan(1);
-    const data = await sharp({ create: { width: 8, height: 8, channels: 3, background: 'red' } })
+    const data = await sharp({
+      create: { width: 8, height: 8, channels: 3, background: 'red' }
+    })
       .tiff({ resolutionUnit: 'cm' })
       .toBuffer();
     const { resolutionUnit } = await sharp(data).metadata();
@@ -538,7 +552,9 @@ suite('TIFF', () => {
 
   test('TIFF file input with invalid page fails gracefully', async (t) => {
     t.plan(1);
-    await t.assert.rejects(sharp(fixtures.inputTiffMultipage, { page: 2 }).toBuffer());
+    await t.assert.rejects(
+      sharp(fixtures.inputTiffMultipage, { page: 2 }).toBuffer()
+    );
   });
 
   test('TIFF buffer input with invalid page fails gracefully', async (t) => {

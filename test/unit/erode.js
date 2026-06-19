@@ -12,7 +12,9 @@ suite('Erode', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(100, info.width);
     t.assert.strictEqual(100, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('erode-1.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('erode-1.png'), data)
+    );
   });
 
   test('erode 1 png - default width', async (t) => {
@@ -23,7 +25,9 @@ suite('Erode', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(100, info.width);
     t.assert.strictEqual(100, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('erode-1.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('erode-1.png'), data)
+    );
   });
 
   test('invalid erosion width', (t) => {

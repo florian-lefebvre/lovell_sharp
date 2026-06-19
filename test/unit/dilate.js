@@ -12,7 +12,9 @@ suite('Dilate', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(100, info.width);
     t.assert.strictEqual(100, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('dilate-1.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('dilate-1.png'), data)
+    );
   });
 
   test('dilate 1 png - default width', async (t) => {
@@ -23,7 +25,9 @@ suite('Dilate', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(100, info.width);
     t.assert.strictEqual(100, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('dilate-1.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('dilate-1.png'), data)
+    );
   });
 
   test('invalid dilation width', (t) => {

@@ -64,7 +64,10 @@ suite('Raw pixel data', () => {
     test('Invalid premultiplied', (t) => {
       t.plan(1);
       t.assert.throws(
-        () => sharp({ raw: { width: 1, height: 1, channels: 4, premultiplied: 'zoinks' } }),
+        () =>
+          sharp({
+            raw: { width: 1, height: 1, channels: 4, premultiplied: 'zoinks' }
+          }),
         /Expected boolean for raw\.premultiplied but received zoinks of type string/
       );
     });
@@ -141,7 +144,9 @@ suite('Raw pixel data', () => {
       t.assert.strictEqual(256, png.info.width);
       t.assert.strictEqual(192, png.info.height);
       t.assert.strictEqual(4, png.info.channels);
-      await fixtures.assertSimilar(fixtures.inputPngOverlayLayer1, png.data, { threshold: 7 });
+      await fixtures.assertSimilar(fixtures.inputPngOverlayLayer1, png.data, {
+        threshold: 7
+      });
     });
 
     test('RGBA premultiplied', async (t) => {
@@ -183,7 +188,11 @@ suite('Raw pixel data', () => {
       t.assert.strictEqual(256, unpremultiplied.info.width);
       t.assert.strictEqual(192, unpremultiplied.info.height);
       t.assert.strictEqual(4, unpremultiplied.info.channels);
-      t.assert.equal(unpremultiplied.data.compare(originalData), 0, 'output buffer matches unpremultiplied input buffer');
+      t.assert.equal(
+        unpremultiplied.data.compare(originalData),
+        0,
+        'output buffer matches unpremultiplied input buffer'
+      );
     });
 
     test('JPEG to raw Stream and back again', async (t) => {
@@ -198,23 +207,18 @@ suite('Raw pixel data', () => {
         }
       });
       const finished = new Promise((resolve, reject) => {
-        writable
-          .jpeg()
-          .toBuffer((err, _data, info) => {
-            if (err) {
-              reject(err);
-              return;
-            }
-            t.assert.strictEqual('jpeg', info.format);
-            t.assert.strictEqual(32, info.width);
-            t.assert.strictEqual(24, info.height);
-            resolve();
-          });
+        writable.jpeg().toBuffer((err, _data, info) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          t.assert.strictEqual('jpeg', info.format);
+          t.assert.strictEqual(32, info.width);
+          t.assert.strictEqual(24, info.height);
+          resolve();
+        });
       });
-      sharp(fixtures.inputJpg)
-        .resize(width, height)
-        .raw()
-        .pipe(writable);
+      sharp(fixtures.inputJpg).resize(width, height).raw().pipe(writable);
       await finished;
     });
   });
@@ -279,8 +283,9 @@ suite('Raw pixel data', () => {
     test('Invalid depth', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(Buffer.alloc(3), { raw: { width: 1, height: 1, channels: 3 } })
-          .raw({ depth: 'zoinks' });
+        sharp(Buffer.alloc(3), {
+          raw: { width: 1, height: 1, channels: 3 }
+        }).raw({ depth: 'zoinks' });
       });
     });
 
@@ -298,7 +303,9 @@ suite('Raw pixel data', () => {
     ]) {
       test(type.name, async (t) => {
         t.plan(depth === undefined ? 4 : 5);
-        const { data, info } = await sharp(new type(3), { raw: { width: 1, height: 1, channels: 3 } })
+        const { data, info } = await sharp(new type(3), {
+          raw: { width: 1, height: 1, channels: 3 }
+        })
           .raw({ depth })
           .toBuffer({ resolveWithObject: true });
         t.assert.strictEqual(1, info.width);
@@ -314,10 +321,10 @@ suite('Raw pixel data', () => {
 
   test('Animated', async (t) => {
     t.plan(4);
-    const gif = await sharp(
-      Buffer.alloc(8),
-      { raw: { width: 1, height: 2, channels: 4, pageHeight: 1 }, animated: true }
-    )
+    const gif = await sharp(Buffer.alloc(8), {
+      raw: { width: 1, height: 2, channels: 4, pageHeight: 1 },
+      animated: true
+    })
       .gif({ keepDuplicateFrames: true })
       .toBuffer();
 
@@ -332,10 +339,9 @@ suite('Raw pixel data', () => {
     test('grey', async (t) => {
       t.plan(1);
       const grey = 42000;
-      const png = await sharp(
-        Uint16Array.from([grey]),
-        { raw: { width: 1, height: 1, channels: 1 } }
-      )
+      const png = await sharp(Uint16Array.from([grey]), {
+        raw: { width: 1, height: 1, channels: 1 }
+      })
         .toColourspace('grey16')
         .png({ compressionLevel: 0 })
         .toBuffer();
@@ -350,10 +356,9 @@ suite('Raw pixel data', () => {
     test('RGB', async (t) => {
       t.plan(3);
       const rgb = [10946, 28657, 46368];
-      const png = await sharp(
-        Uint16Array.from(rgb),
-        { raw: { width: 1, height: 1, channels: 3 } }
-      )
+      const png = await sharp(Uint16Array.from(rgb), {
+        raw: { width: 1, height: 1, channels: 3 }
+      })
         .toColourspace('rgb16')
         .png({ compressionLevel: 0 })
         .toBuffer();

@@ -1,36 +1,48 @@
 // @ts-check
-import * as fs from "node:fs/promises";
+import * as fs from 'node:fs/promises';
 
-const distDir = new URL("../dist/", import.meta.url);
+const distDir = new URL('../dist/', import.meta.url);
 
 await fs.rm(distDir, { force: true, recursive: true });
-await fs.mkdir(new URL("../dist/", import.meta.url), { recursive: true });
+await fs.mkdir(new URL('../dist/', import.meta.url), { recursive: true });
 
-const libDir = new URL("../lib/", import.meta.url);
+const libDir = new URL('../lib/', import.meta.url);
 
 /**
  * @param {string} input
  * @returns {string}
  */
 function esmToCjs(input) {
-  return input
-    // Turn import into require() and .mjs into .cjs
-    .replace(
-      /import\s+(.+)\s+from\s+('[^']+'|"[^"]+")(?:\s+with\s+\{[^}]*\})?;?/g,
-      (_, bindings, path) => `const ${bindings} = require(${path.replace(".mjs", ".cjs")});`,
-    )
-    .replace(/import\s+('[^']+'|"[^"]+")(?:\s+with\s+\{[^}]*\})?;?/g, (_, path) => `require(${path.replace(".mjs", ".cjs")});`)
-    // Transforms TLA
-    .replaceAll("export default", "module.exports =")
-    // Remove createRequire
-    .replaceAll("const { createRequire } = require(\"node:module\");", "")
-    .replaceAll("const require = createRequire(import.meta.url);", "")
+  return (
+    input
+      // Turn import into require() and .mjs into .cjs
+      .replace(
+        /import\s+(.+)\s+from\s+('[^']+'|"[^"]+")(?:\s+with\s+\{[^}]*\})?;?/g,
+        (_, bindings, path) =>
+          `const ${bindings} = require(${path.replace('.mjs', '.cjs')});`
+      )
+      .replace(
+        /import\s+('[^']+'|"[^"]+")(?:\s+with\s+\{[^}]*\})?;?/g,
+        (_, path) => `require(${path.replace('.mjs', '.cjs')});`
+      )
+      // Transforms TLA
+      .replaceAll('export default', 'module.exports =')
+      // Remove createRequire
+      .replaceAll('const { createRequire } = require("node:module");', '')
+      .replaceAll('const require = createRequire(import.meta.url);', '')
+  );
 }
 
 function typeDefsToEsm(input) {
   input = input.replace(/\r\n/g, '\n');
-  input = input.replace(/declare function sharp\(options\?:\s*sharp\.SharpOptions\):\s*sharp\.Sharp;\n?/g, '');
-  input = input.replace(/declare function sharp\(\s*\n\s*input\?:\s*sharp\.SharpInput\s*\|\s*Array<sharp\.SharpInput>,\s*\n\s*options\?:\s*sharp\.SharpOptions,\s*\n\):\s*sharp\.Sharp;\n?/g, '');
+  input = input.replace(
+    /declare function sharp\(options\?:\s*sharp\.SharpOptions\):\s*sharp\.Sharp;\n?/g,
+    ''
+  );
+  input = input.replace(
+    /declare function sharp\(\s*\n\s*input\?:\s*sharp\.SharpInput\s*\|\s*Array<sharp\.SharpInput>,\s*\n\s*options\?:\s*sharp\.SharpOptions,\s*\n\):\s*sharp\.Sharp;\n?/g,
+    ''
+  );
 
   const namespaceStart = input.indexOf('declare namespace sharp {');
   if (namespaceStart === -1) {
@@ -41,14 +53,20 @@ function typeDefsToEsm(input) {
     throw new Error('namespace closing pattern not found');
   }
 
-  const namespaceBody = input.slice(namespaceStart + 'declare namespace sharp {'.length, namespaceEnd);
+  const namespaceBody = input.slice(
+    namespaceStart + 'declare namespace sharp {'.length,
+    namespaceEnd
+  );
   const before = input.slice(0, namespaceStart);
   const after = input.slice(namespaceEnd + '\n}\n\nexport = sharp;'.length);
 
-  const lines = namespaceBody.split('\n').map(line => {
+  const lines = namespaceBody.split('\n').map((line) => {
     let out = line.replace(/^ {4}/, '');
     out = out.replace(/\bsharp\./g, '');
-    if (/^(const|function|interface|type|class|enum)\b/.test(out) && !/^export\b/.test(out)) {
+    if (
+      /^(const|function|interface|type|class|enum)\b/.test(out) &&
+      !/^export\b/.test(out)
+    ) {
       out = `export ${out}`;
     }
     return out;
@@ -110,22 +128,33 @@ function typeDefsToEsm(input) {
     '',
     'export const sharp: SharpConstructor;',
     'export default sharp;',
-    '',
+    ''
   ].join('\n');
 
-  return [before.trimEnd(), '', lines.join('\n').trim(), ctor, after.trimStart()].join('\n').replace(/\bsharp\./g, '');
+  return [
+    before.trimEnd(),
+    '',
+    lines.join('\n').trim(),
+    ctor,
+    after.trimStart()
+  ]
+    .join('\n')
+    .replace(/\bsharp\./g, '');
 }
 
-const entries = (await fs.readdir(libDir)).filter(e => e.endsWith('.mjs'));
+const entries = (await fs.readdir(libDir)).filter((e) => e.endsWith('.mjs'));
 
 for (const entry of entries) {
   await fs.cp(new URL(entry, libDir), new URL(entry, distDir));
-  const contents = await fs.readFile(new URL(entry, libDir), "utf-8");
-  await fs.writeFile(new URL(entry.replace(".mjs", ".cjs"), distDir), esmToCjs(contents));
-} 
+  const contents = await fs.readFile(new URL(entry, libDir), 'utf-8');
+  await fs.writeFile(
+    new URL(entry.replace('.mjs', '.cjs'), distDir),
+    esmToCjs(contents)
+  );
+}
 
-const typeDefsCjs = await fs.readFile(new URL("index.d.ts", libDir), "utf-8");
-await fs.writeFile(new URL("index.d.cts", distDir), typeDefsCjs);
+const typeDefsCjs = await fs.readFile(new URL('index.d.ts', libDir), 'utf-8');
+await fs.writeFile(new URL('index.d.cts', distDir), typeDefsCjs);
 
 const typeDefsEsm = typeDefsToEsm(typeDefsCjs);
-await fs.writeFile(new URL("index.d.mts", distDir), typeDefsEsm);
+await fs.writeFile(new URL('index.d.mts', distDir), typeDefsEsm);

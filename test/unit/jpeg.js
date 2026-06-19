@@ -15,9 +15,7 @@ suite('JPEG', () => {
       .resize(320, 240)
       .jpeg({ quality: 70 })
       .toBuffer();
-    const buffer80 = await sharp(fixtures.inputJpg)
-      .resize(320, 240)
-      .toBuffer();
+    const buffer80 = await sharp(fixtures.inputJpg).resize(320, 240).toBuffer();
     const buffer90 = await sharp(fixtures.inputJpg)
       .resize(320, 240)
       .jpeg({ quality: 90 })
@@ -65,7 +63,10 @@ suite('JPEG', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, progressive.data.length > 0);
     t.assert.strictEqual(progressive.data.length, progressive.info.size);
-    t.assert.strictEqual(false, progressive.data.length === nonProgressive.data.length);
+    t.assert.strictEqual(
+      false,
+      progressive.data.length === nonProgressive.data.length
+    );
     t.assert.strictEqual('jpeg', progressive.info.format);
     t.assert.strictEqual(320, progressive.info.width);
     t.assert.strictEqual(240, progressive.info.height);
@@ -79,7 +80,10 @@ suite('JPEG', () => {
       .jpeg({ chromaSubsampling: '4:2:0' })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, withChromaSubsampling.data.length > 0);
-    t.assert.strictEqual(withChromaSubsampling.data.length, withChromaSubsampling.info.size);
+    t.assert.strictEqual(
+      withChromaSubsampling.data.length,
+      withChromaSubsampling.info.size
+    );
     t.assert.strictEqual('jpeg', withChromaSubsampling.info.format);
     t.assert.strictEqual(320, withChromaSubsampling.info.width);
     t.assert.strictEqual(240, withChromaSubsampling.info.height);
@@ -89,11 +93,17 @@ suite('JPEG', () => {
       .jpeg({ chromaSubsampling: '4:4:4' })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, withoutChromaSubsampling.data.length > 0);
-    t.assert.strictEqual(withoutChromaSubsampling.data.length, withoutChromaSubsampling.info.size);
+    t.assert.strictEqual(
+      withoutChromaSubsampling.data.length,
+      withoutChromaSubsampling.info.size
+    );
     t.assert.strictEqual('jpeg', withoutChromaSubsampling.info.format);
     t.assert.strictEqual(320, withoutChromaSubsampling.info.width);
     t.assert.strictEqual(240, withoutChromaSubsampling.info.height);
-    t.assert.strictEqual(true, withChromaSubsampling.data.length < withoutChromaSubsampling.data.length);
+    t.assert.strictEqual(
+      true,
+      withChromaSubsampling.data.length < withoutChromaSubsampling.data.length
+    );
   });
 
   test('Invalid JPEG chromaSubsampling value throws error', (t) => {
@@ -187,7 +197,10 @@ suite('JPEG', () => {
       .jpeg()
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, withOptimiseCoding.data.length > 0);
-    t.assert.strictEqual(withOptimiseCoding.data.length, withOptimiseCoding.info.size);
+    t.assert.strictEqual(
+      withOptimiseCoding.data.length,
+      withOptimiseCoding.info.size
+    );
     t.assert.strictEqual('jpeg', withOptimiseCoding.info.format);
     t.assert.strictEqual(320, withOptimiseCoding.info.width);
     t.assert.strictEqual(240, withOptimiseCoding.info.height);
@@ -197,12 +210,18 @@ suite('JPEG', () => {
       .jpeg({ optimizeCoding: false })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, withoutOptimiseCoding.data.length > 0);
-    t.assert.strictEqual(withoutOptimiseCoding.data.length, withoutOptimiseCoding.info.size);
+    t.assert.strictEqual(
+      withoutOptimiseCoding.data.length,
+      withoutOptimiseCoding.info.size
+    );
     t.assert.strictEqual('jpeg', withoutOptimiseCoding.info.format);
     t.assert.strictEqual(320, withoutOptimiseCoding.info.width);
     t.assert.strictEqual(240, withoutOptimiseCoding.info.height);
     // Verify optimised image is of a smaller size
-    t.assert.strictEqual(true, withOptimiseCoding.data.length < withoutOptimiseCoding.data.length);
+    t.assert.strictEqual(
+      true,
+      withOptimiseCoding.data.length < withoutOptimiseCoding.data.length
+    );
   });
 
   test('Specifying quantisation table provides different JPEG', async (t) => {
@@ -213,7 +232,10 @@ suite('JPEG', () => {
       .jpeg({ optimiseCoding: false })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, withDefaultQuantisationTable.data.length > 0);
-    t.assert.strictEqual(withDefaultQuantisationTable.data.length, withDefaultQuantisationTable.info.size);
+    t.assert.strictEqual(
+      withDefaultQuantisationTable.data.length,
+      withDefaultQuantisationTable.info.size
+    );
     t.assert.strictEqual('jpeg', withDefaultQuantisationTable.info.format);
     t.assert.strictEqual(320, withDefaultQuantisationTable.info.width);
     t.assert.strictEqual(240, withDefaultQuantisationTable.info.height);
@@ -223,13 +245,19 @@ suite('JPEG', () => {
       .jpeg({ optimiseCoding: false, quantisationTable: 3 })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, withQuantTable3.data.length > 0);
-    t.assert.strictEqual(withQuantTable3.data.length, withQuantTable3.info.size);
+    t.assert.strictEqual(
+      withQuantTable3.data.length,
+      withQuantTable3.info.size
+    );
     t.assert.strictEqual('jpeg', withQuantTable3.info.format);
     t.assert.strictEqual(320, withQuantTable3.info.width);
     t.assert.strictEqual(240, withQuantTable3.info.height);
 
     // Verify image is same (as mozjpeg may not be present) size or less
-    t.assert.strictEqual(true, withQuantTable3.data.length <= withDefaultQuantisationTable.data.length);
+    t.assert.strictEqual(
+      true,
+      withQuantTable3.data.length <= withDefaultQuantisationTable.data.length
+    );
   });
 
   test('Specifying quantization table provides different JPEG', async (t) => {
@@ -240,7 +268,10 @@ suite('JPEG', () => {
       .jpeg({ optimiseCoding: false })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, withDefaultQuantizationTable.data.length > 0);
-    t.assert.strictEqual(withDefaultQuantizationTable.data.length, withDefaultQuantizationTable.info.size);
+    t.assert.strictEqual(
+      withDefaultQuantizationTable.data.length,
+      withDefaultQuantizationTable.info.size
+    );
     t.assert.strictEqual('jpeg', withDefaultQuantizationTable.info.format);
     t.assert.strictEqual(320, withDefaultQuantizationTable.info.width);
     t.assert.strictEqual(240, withDefaultQuantizationTable.info.height);
@@ -250,13 +281,19 @@ suite('JPEG', () => {
       .jpeg({ optimiseCoding: false, quantizationTable: 3 })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, withQuantTable3.data.length > 0);
-    t.assert.strictEqual(withQuantTable3.data.length, withQuantTable3.info.size);
+    t.assert.strictEqual(
+      withQuantTable3.data.length,
+      withQuantTable3.info.size
+    );
     t.assert.strictEqual('jpeg', withQuantTable3.info.format);
     t.assert.strictEqual(320, withQuantTable3.info.width);
     t.assert.strictEqual(240, withQuantTable3.info.height);
 
     // Verify image is same (as mozjpeg may not be present) size or less
-    t.assert.strictEqual(true, withQuantTable3.data.length <= withDefaultQuantizationTable.data.length);
+    t.assert.strictEqual(
+      true,
+      withQuantTable3.data.length <= withDefaultQuantizationTable.data.length
+    );
   });
 
   test('Can use mozjpeg defaults', async (t) => {

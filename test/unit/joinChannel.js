@@ -20,7 +20,9 @@ suite('Image channel insertion', () => {
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
     t.assert.strictEqual(3, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('joinChannel-rgb.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('joinChannel-rgb.jpg'), data)
+    );
   });
 
   test('Grayscale to RGB, file', async (t) => {
@@ -33,7 +35,9 @@ suite('Image channel insertion', () => {
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
     t.assert.strictEqual(3, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('joinChannel-rgb.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('joinChannel-rgb.jpg'), data)
+    );
   });
 
   test('Grayscale to RGBA, buffer', async (t) => {
@@ -50,7 +54,9 @@ suite('Image channel insertion', () => {
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
     t.assert.strictEqual(4, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('joinChannel-rgba.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('joinChannel-rgba.png'), data)
+    );
   });
 
   test('Grayscale to RGBA, file', async (t) => {
@@ -67,7 +73,9 @@ suite('Image channel insertion', () => {
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
     t.assert.strictEqual(4, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('joinChannel-rgba.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('joinChannel-rgba.png'), data)
+    );
   });
 
   test('Grayscale to CMYK, buffers', async (t) => {
@@ -85,13 +93,18 @@ suite('Image channel insertion', () => {
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
     t.assert.strictEqual(4, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('joinChannel-cmyk.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('joinChannel-cmyk.jpg'), data)
+    );
   });
 
   test('Join raw buffers to RGB', async (t) => {
     t.plan(4);
     const buffers = await Promise.all([
-      sharp(fixtures.inputPngTestJoinChannel).toColourspace('b-w').raw().toBuffer(),
+      sharp(fixtures.inputPngTestJoinChannel)
+        .toColourspace('b-w')
+        .raw()
+        .toBuffer(),
       sharp(fixtures.inputPngStripesH).toColourspace('b-w').raw().toBuffer()
     ]);
     const { data, info } = await sharp(fixtures.inputPng)
@@ -107,7 +120,9 @@ suite('Image channel insertion', () => {
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
     t.assert.strictEqual(3, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('joinChannel-rgb.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('joinChannel-rgb.jpg'), data)
+    );
   });
 
   test('Grayscale to RGBA, files, two arrays', async (t) => {
@@ -124,7 +139,9 @@ suite('Image channel insertion', () => {
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
     t.assert.strictEqual(4, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('joinChannel-rgba.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('joinChannel-rgba.png'), data)
+    );
   });
 
   test('Invalid raw buffer description', (t) => {

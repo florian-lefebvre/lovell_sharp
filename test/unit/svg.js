@@ -42,8 +42,11 @@ suite('SVG input', () => {
     t.plan(4);
     const size = 1024;
     const metadata = await sharp(fixtures.inputSvgSmallViewBox).metadata();
-    const density = (size / Math.max(metadata.width, metadata.height)) * metadata.density;
-    const { data, info } = await sharp(fixtures.inputSvgSmallViewBox, { density })
+    const density =
+      (size / Math.max(metadata.width, metadata.height)) * metadata.density;
+    const { data, info } = await sharp(fixtures.inputSvgSmallViewBox, {
+      density
+    })
       .resize(size)
       .toFormat('png')
       .toBuffer({ resolveWithObject: true });
@@ -81,8 +84,9 @@ suite('SVG input', () => {
 
   test('Convert SVG with embedded images to PNG, respecting dimensions, autoconvert to PNG', async (t) => {
     t.plan(4);
-    const { data, info } = await sharp(fixtures.inputSvgWithEmbeddedImages)
-      .toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(
+      fixtures.inputSvgWithEmbeddedImages
+    ).toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(480, info.width);
     t.assert.strictEqual(360, info.height);
@@ -98,7 +102,9 @@ suite('SVG input', () => {
         <image width="294" height="240" xlink:href="data:image/png;base64,${truncatedPng.toString('base64')}"/>
       </svg>`;
 
-    const { info } = await sharp(Buffer.from(svg)).toBuffer({ resolveWithObject: true });
+    const { info } = await sharp(Buffer.from(svg)).toBuffer({
+      resolveWithObject: true
+    });
     t.assert.strictEqual(info.format, 'png');
     t.assert.strictEqual(info.width, 294);
     t.assert.strictEqual(info.height, 240);
@@ -131,9 +137,7 @@ suite('SVG input', () => {
 
   test('Valid highBitdepth input option does not throw', (t) => {
     t.plan(1);
-    t.assert.doesNotThrow(
-      () => sharp({ svg: { highBitdepth: true } })
-    );
+    t.assert.doesNotThrow(() => sharp({ svg: { highBitdepth: true } }));
   });
 
   test('Invalid highBitdepth input option throws', (t) => {
@@ -147,7 +151,12 @@ suite('SVG input', () => {
   test('Fails to render SVG larger than 32767x32767', async (t) => {
     t.plan(1);
     await t.assert.rejects(
-      () => sharp(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="32768" height="1" />')).toBuffer(),
+      () =>
+        sharp(
+          Buffer.from(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="32768" height="1" />'
+          )
+        ).toBuffer(),
       /Input SVG image exceeds 32767x32767 pixel limit/
     );
   });
@@ -155,7 +164,14 @@ suite('SVG input', () => {
   test('Fails to render scaled SVG larger than 32767x32767', async (t) => {
     t.plan(1);
     await t.assert.rejects(
-      () => sharp(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="32767" height="1" />')).resize(32768).toBuffer(),
+      () =>
+        sharp(
+          Buffer.from(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="32767" height="1" />'
+          )
+        )
+          .resize(32768)
+          .toBuffer(),
       /Input SVG image will exceed 32767x32767 pixel limit when scaled/
     );
   });

@@ -94,7 +94,9 @@ suite('Gaussian noise', () => {
     t.assert.strictEqual(320, outputInfo.width);
     t.assert.strictEqual(240, outputInfo.height);
     t.assert.strictEqual(3, outputInfo.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(output, fixtures.inputJpg));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(output, fixtures.inputJpg)
+    );
   });
 
   test('overlay strong single-channel (sRGB) gaussian noise with 25% transparency over transparent png image', async (t) => {
@@ -147,7 +149,11 @@ suite('Gaussian noise', () => {
     t.assert.strictEqual(width, outputInfo.width);
     t.assert.strictEqual(height, outputInfo.height);
     t.assert.strictEqual(4, outputInfo.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(output, fixtures.inputPngRGBWithAlpha, { threshold: 10 }));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(output, fixtures.inputPngRGBWithAlpha, {
+        threshold: 10
+      })
+    );
   });
 
   test('animated noise', async (t) => {

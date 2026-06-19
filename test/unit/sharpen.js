@@ -18,7 +18,9 @@ suite('Sharpen', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('sharpen-10.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('sharpen-10.jpg'), data)
+    );
   });
 
   test('specific radius 3 (sigma 1.5) and levels 0.5, 2.5', async (t) => {
@@ -30,7 +32,9 @@ suite('Sharpen', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('sharpen-3-0.5-2.5.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('sharpen-3-0.5-2.5.jpg'), data)
+    );
   });
 
   test('specific radius 5 (sigma 3.5) and levels 2, 4', async (t) => {
@@ -42,7 +46,9 @@ suite('Sharpen', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('sharpen-5-2-4.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('sharpen-5-2-4.jpg'), data)
+    );
   });
 
   test('sigma=3.5, m1=2, m2=4', async (t) => {
@@ -51,7 +57,9 @@ suite('Sharpen', () => {
       .resize(320, 240)
       .sharpen({ sigma: 3.5, m1: 2, m2: 4 })
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('sharpen-5-2-4.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('sharpen-5-2-4.jpg'), data)
+    );
   });
 
   test('sigma=3.5, m1=2, m2=4, x1=2, y2=5, y3=25', async (t) => {
@@ -60,7 +68,9 @@ suite('Sharpen', () => {
       .resize(320, 240)
       .sharpen({ sigma: 3.5, m1: 2, m2: 4, x1: 2, y2: 5, y3: 25 })
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('sharpen-5-2-4.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('sharpen-5-2-4.jpg'), data)
+    );
   });
 
   if (!process.env.SHARP_TEST_WITHOUT_CACHE) {
@@ -74,7 +84,9 @@ suite('Sharpen', () => {
       t.assert.strictEqual(4, info.channels);
       t.assert.strictEqual(320, info.width);
       t.assert.strictEqual(240, info.height);
-      await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('sharpen-rgba.png'), data));
+      await t.assert.doesNotReject(() =>
+        fixtures.assertSimilar(fixtures.expected('sharpen-rgba.png'), data)
+      );
     });
   }
 
@@ -87,7 +99,9 @@ suite('Sharpen', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('sharpen-mild.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('sharpen-mild.jpg'), data)
+    );
   });
 
   test('invalid options.sigma', (t) => {
@@ -103,39 +117,46 @@ suite('Sharpen', () => {
     t.assert.throws(
       () => sharp().sharpen({ sigma: 1, m1: -1 }),
       /Expected number between 0 and 1000000 for options\.m1 but received -1 of type number/
-  ); });
+    );
+  });
 
   test('invalid options.m2', (t) => {
     t.plan(1);
     t.assert.throws(
       () => sharp().sharpen({ sigma: 1, m2: -1 }),
       /Expected number between 0 and 1000000 for options\.m2 but received -1 of type number/
-  ); });
+    );
+  });
 
   test('invalid options.x1', (t) => {
     t.plan(1);
     t.assert.throws(
       () => sharp().sharpen({ sigma: 1, x1: -1 }),
       /Expected number between 0 and 1000000 for options\.x1 but received -1 of type number/
-  ); });
+    );
+  });
 
   test('invalid options.y2', (t) => {
     t.plan(1);
     t.assert.throws(
       () => sharp().sharpen({ sigma: 1, y2: -1 }),
       /Expected number between 0 and 1000000 for options\.y2 but received -1 of type number/
-  ); });
+    );
+  });
 
   test('invalid options.y3', (t) => {
     t.plan(1);
     t.assert.throws(
       () => sharp().sharpen({ sigma: 1, y3: -1 }),
       /Expected number between 0 and 1000000 for options\.y3 but received -1 of type number/
-  ); });
+    );
+  });
 
   test('sharpened image is larger than non-sharpened', async (t) => {
     t.plan(9);
-    const { data: notSharpened, info: notSharpenedInfo } = await sharp(fixtures.inputJpg)
+    const { data: notSharpened, info: notSharpenedInfo } = await sharp(
+      fixtures.inputJpg
+    )
       .resize(32, 24)
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(true, notSharpened.length > 0);
@@ -143,7 +164,9 @@ suite('Sharpen', () => {
     t.assert.strictEqual(32, notSharpenedInfo.width);
     t.assert.strictEqual(24, notSharpenedInfo.height);
 
-    const { data: sharpened, info: sharpenedInfo } = await sharp(fixtures.inputJpg)
+    const { data: sharpened, info: sharpenedInfo } = await sharp(
+      fixtures.inputJpg
+    )
       .resize(32, 24)
       .sharpen()
       .toBuffer({ resolveWithObject: true });

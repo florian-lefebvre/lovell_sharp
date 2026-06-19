@@ -22,8 +22,9 @@ suite('toBuffer', () => {
 
   test('correctly process animated webp with height > 16383', async (t) => {
     t.plan(1);
-    const data = await sharp(fixtures.inputWebPAnimatedBigHeight, { animated: true })
-      .toBuffer();
+    const data = await sharp(fixtures.inputWebPAnimatedBigHeight, {
+      animated: true
+    }).toBuffer();
     t.assert.strictEqual(Buffer.isBuffer(data), true);
   });
 });

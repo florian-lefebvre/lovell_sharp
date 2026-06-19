@@ -16,11 +16,12 @@ suite('Utilities', () => {
         const cache = sharp.cache(false);
         const empty =
           cache.memory.current +
-          cache.memory.max +
-          cache.files.current +
-          cache.files.max +
-          cache.items.current +
-          cache.items.max === 0;
+            cache.memory.max +
+            cache.files.current +
+            cache.files.max +
+            cache.items.current +
+            cache.items.max ===
+          0;
         if (empty) {
           clearInterval(check);
           t.assert.ok(empty);
@@ -117,21 +118,35 @@ suite('Utilities', () => {
   suite('Format', () => {
     test('Contains expected attributes', (t) => {
       const formats = Object.keys(sharp.format);
-      t.plan((formats.length * 20) + 1);
+      t.plan(formats.length * 20 + 1);
       t.assert.strictEqual(typeof sharp.format, 'object');
       formats.forEach((format) => {
         t.assert.ok('id' in sharp.format[format]);
         t.assert.strictEqual(format, sharp.format[format].id);
         ['input', 'output'].forEach((direction) => {
           t.assert.ok(direction in sharp.format[format]);
-          t.assert.strictEqual(typeof sharp.format[format][direction], 'object');
-          t.assert.ok([3, 4].includes(Object.keys(sharp.format[format][direction]).length));
+          t.assert.strictEqual(
+            typeof sharp.format[format][direction],
+            'object'
+          );
+          t.assert.ok(
+            [3, 4].includes(Object.keys(sharp.format[format][direction]).length)
+          );
           t.assert.ok('file' in sharp.format[format][direction]);
           t.assert.ok('buffer' in sharp.format[format][direction]);
           t.assert.ok('stream' in sharp.format[format][direction]);
-          t.assert.strictEqual(typeof sharp.format[format][direction].file, 'boolean');
-          t.assert.strictEqual(typeof sharp.format[format][direction].buffer, 'boolean');
-          t.assert.strictEqual(typeof sharp.format[format][direction].stream, 'boolean');
+          t.assert.strictEqual(
+            typeof sharp.format[format][direction].file,
+            'boolean'
+          );
+          t.assert.strictEqual(
+            typeof sharp.format[format][direction].buffer,
+            'boolean'
+          );
+          t.assert.strictEqual(
+            typeof sharp.format[format][direction].stream,
+            'boolean'
+          );
         });
       });
     });
@@ -153,7 +168,10 @@ suite('Utilities', () => {
     });
     test('input fileSuffix', (t) => {
       t.plan(1);
-      t.assert.deepStrictEqual(['.jpg', '.jpeg', '.jpe', '.jfif'], sharp.format.jpeg.input.fileSuffix);
+      t.assert.deepStrictEqual(
+        ['.jpg', '.jpeg', '.jpe', '.jfif'],
+        sharp.format.jpeg.input.fileSuffix
+      );
     });
     test('output alias', (t) => {
       t.plan(1);
@@ -181,31 +199,39 @@ suite('Utilities', () => {
     });
     test('Invalid block operation throws', (t) => {
       t.plan(4);
-      t.assert.throws(() => sharp.block(1),
+      t.assert.throws(
+        () => sharp.block(1),
         /Expected object for options but received 1 of type number/
       );
-      t.assert.throws(() => sharp.block({}),
+      t.assert.throws(
+        () => sharp.block({}),
         /Expected Array<string> for operation but received undefined of type undefined/
       );
-      t.assert.throws(() => sharp.block({ operation: 'fail' }),
+      t.assert.throws(
+        () => sharp.block({ operation: 'fail' }),
         /Expected Array<string> for operation but received fail of type string/
       );
-      t.assert.throws(() => sharp.block({ operation: ['maybe', false] }),
+      t.assert.throws(
+        () => sharp.block({ operation: ['maybe', false] }),
         /Expected Array<string> for operation but received maybe,false of type object/
       );
     });
     test('Invalid unblock operation throws', (t) => {
       t.plan(4);
-      t.assert.throws(() => sharp.unblock(1),
+      t.assert.throws(
+        () => sharp.unblock(1),
         /Expected object for options but received 1 of type number/
       );
-      t.assert.throws(() => sharp.unblock({}),
+      t.assert.throws(
+        () => sharp.unblock({}),
         /Expected Array<string> for operation but received undefined of type undefined/
       );
-      t.assert.throws(() => sharp.unblock({ operation: 'fail' }),
+      t.assert.throws(
+        () => sharp.unblock({ operation: 'fail' }),
         /Expected Array<string> for operation but received fail of type string/
       );
-      t.assert.throws(() => sharp.unblock({ operation: ['maybe', false] }),
+      t.assert.throws(
+        () => sharp.unblock({ operation: ['maybe', false] }),
         /Expected Array<string> for operation but received maybe,false of type object/
       );
     });

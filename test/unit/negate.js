@@ -18,7 +18,9 @@ suite('Negate', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('negate.jpg'), data)
+    );
   });
 
   test('negate (png)', async (t) => {
@@ -30,7 +32,9 @@ suite('Negate', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('negate.png'), data)
+    );
   });
 
   test('negate (png, trans)', async (t) => {
@@ -42,7 +46,9 @@ suite('Negate', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate-trans.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('negate-trans.png'), data)
+    );
   });
 
   test('negate (png, alpha)', async (t) => {
@@ -54,7 +60,9 @@ suite('Negate', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate-alpha.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('negate-alpha.png'), data)
+    );
   });
 
   test('negate (webp)', async (t) => {
@@ -66,7 +74,9 @@ suite('Negate', () => {
     t.assert.strictEqual('webp', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate.webp'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('negate.webp'), data)
+    );
   });
 
   test('negate (webp, trans)', async (t) => {
@@ -78,7 +88,9 @@ suite('Negate', () => {
     t.assert.strictEqual('webp', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate-trans.webp'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('negate-trans.webp'), data)
+    );
   });
 
   test('negate (true)', async (t) => {
@@ -90,16 +102,22 @@ suite('Negate', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('negate.jpg'), data)
+    );
   });
 
   test('negate (false)', async (t) => {
     t.plan(1);
     const output = fixtures.path('output.unmodified-by-negate.png');
-    await sharp(fixtures.inputJpgWithLowContrast)
-      .negate(false)
-      .toFile(output);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(output, fixtures.inputJpgWithLowContrast, 0));
+    await sharp(fixtures.inputJpgWithLowContrast).negate(false).toFile(output);
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.inputJpgWithLowContrast,
+        0
+      )
+    );
   });
 
   test('negate ({alpha: true})', async (t) => {
@@ -111,7 +129,9 @@ suite('Negate', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('negate.jpg'), data)
+    );
   });
 
   test('negate non-alpha channels (png)', async (t) => {
@@ -123,7 +143,12 @@ suite('Negate', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate-preserve-alpha.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('negate-preserve-alpha.png'),
+        data
+      )
+    );
   });
 
   test('negate non-alpha channels (png, trans)', async (t) => {
@@ -135,7 +160,12 @@ suite('Negate', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate-preserve-alpha-trans.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('negate-preserve-alpha-trans.png'),
+        data
+      )
+    );
   });
 
   test('negate non-alpha channels (png, alpha)', async (t) => {
@@ -147,7 +177,12 @@ suite('Negate', () => {
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate-preserve-alpha-grey.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('negate-preserve-alpha-grey.png'),
+        data
+      )
+    );
   });
 
   test('negate non-alpha channels (webp)', async (t) => {
@@ -159,7 +194,12 @@ suite('Negate', () => {
     t.assert.strictEqual('webp', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate-preserve-alpha.webp'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('negate-preserve-alpha.webp'),
+        data
+      )
+    );
   });
 
   test('negate non-alpha channels (webp, trans)', async (t) => {
@@ -171,7 +211,12 @@ suite('Negate', () => {
     t.assert.strictEqual('webp', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('negate-preserve-alpha-trans.webp'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('negate-preserve-alpha-trans.webp'),
+        data
+      )
+    );
   });
 
   test('negate create', async (t) => {

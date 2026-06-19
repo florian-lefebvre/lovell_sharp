@@ -25,7 +25,9 @@ suite('Clone', () => {
     const output1 = fixtures.path('output.multi-stream.1.jpg');
     const writable1 = createWriteStream(output1);
     writable1.on('finish', async () => {
-      const { data, info } = await sharp(output1).toBuffer({ resolveWithObject: true });
+      const { data, info } = await sharp(output1).toBuffer({
+        resolveWithObject: true
+      });
       t.assert.strictEqual(true, data.length > 0);
       t.assert.strictEqual(data.length, info.size);
       t.assert.strictEqual('jpeg', info.format);
@@ -41,7 +43,9 @@ suite('Clone', () => {
     const output2 = fixtures.path('output.multi-stream.2.jpg');
     const writable2 = createWriteStream(output2);
     writable2.on('finish', async () => {
-      const { data, info } = await sharp(output2).toBuffer({ resolveWithObject: true });
+      const { data, info } = await sharp(output2).toBuffer({
+        resolveWithObject: true
+      });
       t.assert.strictEqual(true, data.length > 0);
       t.assert.strictEqual(data.length, info.size);
       t.assert.strictEqual('jpeg', info.format);
@@ -82,7 +86,10 @@ suite('Clone', () => {
     t.plan(4);
     const alpha = await sharp({
       create: { width: 320, height: 240, channels: 3, background: 'red' }
-    }).toColourspace('b-w').png().toBuffer();
+    })
+      .toColourspace('b-w')
+      .png()
+      .toBuffer();
 
     const original = sharp();
     const joiner = original.clone().joinChannel(alpha);

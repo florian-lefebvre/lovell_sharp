@@ -11,7 +11,7 @@ const {
   inputAvifWithPitmBox,
   inputJpg,
   inputGifAnimated,
-  inputPng,
+  inputPng
 } = require('../fixtures');
 
 suite('AVIF', () => {
@@ -30,7 +30,7 @@ suite('AVIF', () => {
     t.assert.deepStrictEqual(metadata, {
       autoOrient: {
         height: 13,
-        width: 32,
+        width: 32
       },
       channels: 3,
       chromaSubsampling: '4:2:0',
@@ -46,7 +46,7 @@ suite('AVIF', () => {
       isProgressive: false,
       isPalette: false,
       space: 'srgb',
-      width: 32,
+      width: 32
     });
   });
 
@@ -61,7 +61,7 @@ suite('AVIF', () => {
     t.assert.deepStrictEqual(metadata, {
       autoOrient: {
         height: 26,
-        width: 32,
+        width: 32
       },
       channels: 3,
       compression: 'av1',
@@ -77,7 +77,7 @@ suite('AVIF', () => {
       pagePrimary: 0,
       pages: 1,
       space: 'srgb',
-      width: 32,
+      width: 32
     });
   });
 
@@ -92,7 +92,7 @@ suite('AVIF', () => {
     t.assert.deepStrictEqual(metadata, {
       autoOrient: {
         height: 24,
-        width: 32,
+        width: 32
       },
       channels: 3,
       compression: 'av1',
@@ -108,7 +108,7 @@ suite('AVIF', () => {
       pagePrimary: 0,
       pages: 1,
       space: 'srgb',
-      width: 32,
+      width: 32
     });
   });
 
@@ -120,7 +120,7 @@ suite('AVIF', () => {
     t.assert.deepStrictEqual(metadata, {
       autoOrient: {
         height: 13,
-        width: 32,
+        width: 32
       },
       channels: 3,
       compression: 'av1',
@@ -136,7 +136,7 @@ suite('AVIF', () => {
       pagePrimary: 0,
       pages: 1,
       space: 'srgb',
-      width: 32,
+      width: 32
     });
   });
 
@@ -151,7 +151,7 @@ suite('AVIF', () => {
     t.assert.deepStrictEqual(metadata, {
       autoOrient: {
         height: 300,
-        width: 10,
+        width: 10
       },
       channels: 4,
       compression: 'av1',
@@ -167,7 +167,7 @@ suite('AVIF', () => {
       pagePrimary: 0,
       pages: 1,
       space: 'srgb',
-      width: 10,
+      width: 10
     });
   });
 
@@ -183,7 +183,7 @@ suite('AVIF', () => {
     t.assert.deepStrictEqual(metadata, {
       autoOrient: {
         height: 26,
-        width: 32,
+        width: 32
       },
       channels: 3,
       compression: 'av1',
@@ -199,7 +199,7 @@ suite('AVIF', () => {
       pagePrimary: 0,
       pages: 1,
       space: 'srgb',
-      width: 32,
+      width: 32
     });
   });
 
@@ -208,11 +208,11 @@ suite('AVIF', () => {
     await t.assert.rejects(
       () =>
         sharp({
-          create: { width: 16385, height: 16, channels: 3, background: 'red' },
+          create: { width: 16385, height: 16, channels: 3, background: 'red' }
         })
           .avif()
           .toBuffer(),
-      /Processed image is too large for the HEIF format/,
+      /Processed image is too large for the HEIF format/
     );
   });
 
@@ -221,11 +221,11 @@ suite('AVIF', () => {
     await t.assert.rejects(
       () =>
         sharp({
-          create: { width: 16, height: 16385, channels: 3, background: 'red' },
+          create: { width: 16, height: 16385, channels: 3, background: 'red' }
         })
           .avif()
           .toBuffer(),
-      /Processed image is too large for the HEIF format/,
+      /Processed image is too large for the HEIF format/
     );
   });
 
@@ -233,7 +233,7 @@ suite('AVIF', () => {
     t.plan(1);
     t.assert.throws(
       () => sharp().avif({ bitdepth: 11 }),
-      /Expected 8, 10 or 12 for bitdepth but received 11 of type number/,
+      /Expected 8, 10 or 12 for bitdepth but received 11 of type number/
     );
   });
 
@@ -297,7 +297,7 @@ suite('AVIF', () => {
       resolutionUnit: 'cm',
       hasProfile: false,
       hasAlpha: false,
-      autoOrient: { width: 4096, height: 800 },
+      autoOrient: { width: 4096, height: 800 }
     });
 
     const data = await sharp(inputAvifWithPitmBox)
@@ -317,7 +317,7 @@ suite('AVIF', () => {
       bitsPerSample: 8,
       hasProfile: false,
       hasAlpha: false,
-      autoOrient: { width: 4096, height: 800 },
+      autoOrient: { width: 4096, height: 800 }
     });
   });
 });

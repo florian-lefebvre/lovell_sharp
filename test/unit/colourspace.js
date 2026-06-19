@@ -39,15 +39,17 @@ suite('Colour space conversion', () => {
     t.assert.strictEqual(1, info.channels);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('output.greyscale-single.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('output.greyscale-single.jpg'),
+        data
+      )
+    );
   });
 
   test('From 1-bit TIFF to sRGB WebP', async (t) => {
     t.plan(1);
-    const data = await sharp(fixtures.inputTiff)
-      .resize(8, 8)
-      .webp()
-      .toBuffer();
+    const data = await sharp(fixtures.inputTiff).resize(8, 8).webp().toBuffer();
 
     const { format } = await sharp(data).metadata();
     t.assert.strictEqual(format, 'webp');
@@ -74,7 +76,9 @@ suite('Colour space conversion', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('colourspace.cmyk.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('colourspace.cmyk.jpg'), data)
+    );
   });
 
   test('From profile-less CMYK to sRGB', async (t) => {
@@ -84,7 +88,12 @@ suite('Colour space conversion', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('colourspace.cmyk-without-profile.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('colourspace.cmyk-without-profile.jpg'),
+        data
+      )
+    );
   });
 
   test('Profile-less CMYK roundtrip', async (t) => {
@@ -95,10 +104,7 @@ suite('Colour space conversion', () => {
       .raw()
       .toBuffer();
 
-    t.assert.deepStrictEqual(
-      { c, m, y, k },
-      { c: 55, m: 27, y: 0, k: 0 }
-    );
+    t.assert.deepStrictEqual({ c, m, y, k }, { c: 55, m: 27, y: 0, k: 0 });
   });
 
   test('CMYK profile to CMYK profile conversion using perceptual intent', async (t) => {
@@ -112,10 +118,7 @@ suite('Colour space conversion', () => {
       .toBuffer();
 
     const [c, m, y, k] = data;
-    t.assert.deepStrictEqual(
-      { c, m, y, k },
-      { c: 1, m: 239, y: 227, k: 5 }
-    );
+    t.assert.deepStrictEqual({ c, m, y, k }, { c: 1, m: 239, y: 227, k: 5 });
   });
 
   test('CMYK profile to CMYK profile with negate', async (t) => {
@@ -130,11 +133,13 @@ suite('Colour space conversion', () => {
     t.assert.strictEqual('tiff', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(
-      fixtures.expected('colourspace.cmyk-to-cmyk-negated.tif'),
-      data,
-      { threshold: 0 }
-    ));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('colourspace.cmyk-to-cmyk-negated.tif'),
+        data,
+        { threshold: 0 }
+      )
+    );
   });
 
   test('From sRGB with RGB16 pipeline, resize with gamma, to sRGB', async (t) => {
@@ -146,16 +151,20 @@ suite('Colour space conversion', () => {
       .toColourspace('srgb')
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(320, info.width);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('colourspace-gradients-gamma-resize.png'), data, {
-      threshold: 0
-    }));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('colourspace-gradients-gamma-resize.png'),
+        data,
+        {
+          threshold: 0
+        }
+      )
+    );
   });
 
   test('Convert P3 to sRGB', async (t) => {
     t.plan(3);
-    const [r, g, b] = await sharp(fixtures.inputPngP3)
-      .raw()
-      .toBuffer();
+    const [r, g, b] = await sharp(fixtures.inputPngP3).raw().toBuffer();
     t.assert.strictEqual(r, 255);
     t.assert.strictEqual(g, 0);
     t.assert.strictEqual(b, 0);
@@ -175,16 +184,14 @@ suite('Colour space conversion', () => {
   test('Invalid pipelineColourspace input', (t) => {
     t.plan(1);
     t.assert.throws(() => {
-      sharp(fixtures.inputJpg)
-        .pipelineColorspace(null);
+      sharp(fixtures.inputJpg).pipelineColorspace(null);
     }, /Expected string for colourspace but received null of type object/);
   });
 
   test('Invalid toColourspace input', (t) => {
     t.plan(1);
     t.assert.throws(() => {
-      sharp(fixtures.inputJpg)
-        .toColourspace(null);
+      sharp(fixtures.inputJpg).toColourspace(null);
     });
   });
 });

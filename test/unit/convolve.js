@@ -17,17 +17,15 @@ suite('Convolve', () => {
         height: 3,
         scale: 50,
         offset: 0,
-        kernel: [
-          10, 20, 10,
-          0, 0, 0,
-          10, 20, 10
-        ]
+        kernel: [10, 20, 10, 0, 0, 0, 10, 20, 10]
       })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('conv-1.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('conv-1.png'), data)
+    );
   });
 
   test('specific convolution kernel 2', async (t) => {
@@ -36,17 +34,15 @@ suite('Convolve', () => {
       .convolve({
         width: 3,
         height: 3,
-        kernel: [
-          1, 0, 1,
-          2, 0, 2,
-          1, 0, 1
-        ]
+        kernel: [1, 0, 1, 2, 0, 2, 1, 0, 1]
       })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('conv-2.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('conv-2.png'), data)
+    );
   });
 
   test('horizontal Sobel operator', async (t) => {
@@ -56,17 +52,18 @@ suite('Convolve', () => {
       .convolve({
         width: 3,
         height: 3,
-        kernel: [
-          -1, 0, 1,
-          -2, 0, 2,
-          -1, 0, 1
-        ]
+        kernel: [-1, 0, 1, -2, 0, 2, -1, 0, 1]
       })
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('conv-sobel-horizontal.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('conv-sobel-horizontal.jpg'),
+        data
+      )
+    );
   });
 
   suite('invalid kernel specification', () => {
@@ -82,7 +79,11 @@ suite('Convolve', () => {
         sharp(fixtures.inputJpg).convolve({
           width: 3,
           height: 3,
-          kernel: [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+          kernel: [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+          ]
         });
       });
     });

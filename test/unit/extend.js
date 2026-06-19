@@ -18,25 +18,39 @@ suite('Extend', () => {
         .toBuffer({ resolveWithObject: true });
       t.assert.strictEqual(140, info.width);
       t.assert.strictEqual(118, info.height);
-      await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('extend-equal-single.jpg'), data));
+      await t.assert.doesNotReject(() =>
+        fixtures.assertSimilar(
+          fixtures.expected('extend-equal-single.jpg'),
+          data
+        )
+      );
     });
 
     test('Animated WebP', async (t) => {
       t.plan(3);
-      const { data, info } = await sharp(fixtures.inputWebPAnimated, { pages: -1 })
+      const { data, info } = await sharp(fixtures.inputWebPAnimated, {
+        pages: -1
+      })
         .resize(120)
         .extend(10)
         .toBuffer({ resolveWithObject: true });
       t.assert.strictEqual(140, info.width);
       t.assert.strictEqual(140 * 9, info.height);
-      await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('extend-equal-single.webp'), data));
+      await t.assert.doesNotReject(() =>
+        fixtures.assertSimilar(
+          fixtures.expected('extend-equal-single.webp'),
+          data
+        )
+      );
     });
   });
 
-  ['background', 'copy', 'mirror', 'repeat'].forEach(extendWith => {
+  ['background', 'copy', 'mirror', 'repeat'].forEach((extendWith) => {
     test(`extends all sides with animated WebP (${extendWith})`, async (t) => {
       t.plan(3);
-      const { data, info } = await sharp(fixtures.inputWebPAnimated, { pages: -1 })
+      const { data, info } = await sharp(fixtures.inputWebPAnimated, {
+        pages: -1
+      })
         .resize(120)
         .extend({
           extendWith,
@@ -48,7 +62,12 @@ suite('Extend', () => {
         .toBuffer({ resolveWithObject: true });
       t.assert.strictEqual(200, info.width);
       t.assert.strictEqual(200 * 9, info.height);
-      await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected(`extend-equal-${extendWith}.webp`), data));
+      await t.assert.doesNotReject(() =>
+        fixtures.assertSimilar(
+          fixtures.expected(`extend-equal-${extendWith}.webp`),
+          data
+        )
+      );
     });
 
     test(`extend all sides equally with RGB (${extendWith})`, async (t) => {
@@ -66,7 +85,12 @@ suite('Extend', () => {
         .toBuffer({ resolveWithObject: true });
       t.assert.strictEqual(140, info.width);
       t.assert.strictEqual(118, info.height);
-      await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected(`extend-equal-${extendWith}.jpg`), data));
+      await t.assert.doesNotReject(() =>
+        fixtures.assertSimilar(
+          fixtures.expected(`extend-equal-${extendWith}.jpg`),
+          data
+        )
+      );
     });
 
     test(`extend sides unequally with RGBA (${extendWith})`, async (t) => {
@@ -83,7 +107,12 @@ suite('Extend', () => {
         .toBuffer({ resolveWithObject: true });
       t.assert.strictEqual(165, info.width);
       t.assert.strictEqual(170, info.height);
-      await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected(`extend-unequal-${extendWith}.png`), data));
+      await t.assert.doesNotReject(() =>
+        fixtures.assertSimilar(
+          fixtures.expected(`extend-unequal-${extendWith}.png`),
+          data
+        )
+      );
     });
 
     test(`PNG with 2 channels (${extendWith})`, async (t) => {
@@ -103,7 +132,12 @@ suite('Extend', () => {
       t.assert.strictEqual(560, info.width);
       t.assert.strictEqual(400, info.height);
       t.assert.strictEqual(4, info.channels);
-      await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected(`extend-2channel-${extendWith}.png`), data));
+      await t.assert.doesNotReject(() =>
+        fixtures.assertSimilar(
+          fixtures.expected(`extend-2channel-${extendWith}.png`),
+          data
+        )
+      );
     });
   });
 
@@ -124,7 +158,9 @@ suite('Extend', () => {
 
   test('multi-page extend uses ordered read', async (t) => {
     t.plan(2);
-    const multiPageTiff = await sharp(fixtures.inputGifAnimated, { animated: true })
+    const multiPageTiff = await sharp(fixtures.inputGifAnimated, {
+      animated: true
+    })
       .resize({ width: 8, height: 48 })
       .tiff()
       .toBuffer();
@@ -206,7 +242,12 @@ suite('Extend', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(610, info.width);
     t.assert.strictEqual(460, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('addAlphaChanelBeforeExtend.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('addAlphaChanelBeforeExtend.png'),
+        data
+      )
+    );
   });
 
   test('Premultiply background when compositing', async (t) => {
@@ -214,21 +255,33 @@ suite('Extend', () => {
     const background = { r: 191, g: 25, b: 66, alpha: 0.8 };
     const data = await sharp({
       create: {
-        width: 1, height: 1, channels: 4, background: '#fff0'
+        width: 1,
+        height: 1,
+        channels: 4,
+        background: '#fff0'
       }
     })
-      .composite([{
-        input: {
-          create: {
-            width: 1, height: 1, channels: 4, background
+      .composite([
+        {
+          input: {
+            create: {
+              width: 1,
+              height: 1,
+              channels: 4,
+              background
+            }
           }
         }
-      }])
+      ])
       .extend({
-        left: 1, background
+        left: 1,
+        background
       })
       .raw()
       .toBuffer();
-    t.assert.deepStrictEqual(Array.from(data), [191, 25, 66, 204, 191, 25, 66, 204]);
+    t.assert.deepStrictEqual(
+      Array.from(data),
+      [191, 25, 66, 204, 191, 25, 66, 204]
+    );
   });
 });

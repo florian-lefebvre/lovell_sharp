@@ -5,7 +5,13 @@
 
 // Populate the npm package for the current platform with the local build
 
-const { copyFileSync, cpSync, readFileSync, writeFileSync, appendFileSync } = require('node:fs');
+const {
+  copyFileSync,
+  cpSync,
+  readFileSync,
+  writeFileSync,
+  appendFileSync
+} = require('node:fs');
 const { basename, join } = require('node:path');
 
 const { buildPlatformArch } = require('../dist/libvips.cjs');
@@ -24,19 +30,28 @@ cpSync(releaseDir, libDir, {
   recursive: true,
   filter: (file) => {
     const name = basename(file);
-    return name === 'Release' ||
+    return (
+      name === 'Release' ||
       (name.startsWith('sharp-') && name.includes('.node')) ||
-      (name.startsWith('libvips-') && name.endsWith('.dll'));
+      (name.startsWith('libvips-') && name.endsWith('.dll'))
+    );
   }
 });
 
 // Generate README and index.cjs
 const { version, name, description } = require(`./${platform}/package.json`);
-writeFileSync(join(destDir, 'README.md'), `# \`${name}\`\n\n${description}.\n\n${licensing}`);
-const requireStub = (platform.startsWith('darwin') || platform.startsWith('linux'))
-  ? `try { require.resolve('@img/sharp-libvips-${platform}/stub'); } catch {}\n`
-  : '';
-writeFileSync(join(destDir, 'index.cjs'), `${requireStub}module.exports = require('./lib/sharp-${platform}-${version}.node');`);
+writeFileSync(
+  join(destDir, 'README.md'),
+  `# \`${name}\`\n\n${description}.\n\n${licensing}`
+);
+const requireStub =
+  platform.startsWith('darwin') || platform.startsWith('linux')
+    ? `try { require.resolve('@img/sharp-libvips-${platform}/stub'); } catch {}\n`
+    : '';
+writeFileSync(
+  join(destDir, 'index.cjs'),
+  `${requireStub}module.exports = require('./lib/sharp-${platform}-${version}.node');`
+);
 
 // Copy Apache-2.0 LICENSE
 copyFileSync(join(__dirname, '..', 'LICENSE'), join(destDir, 'LICENSE'));
@@ -44,11 +59,21 @@ copyFileSync(join(__dirname, '..', 'LICENSE'), join(destDir, 'LICENSE'));
 // Copy files for packages without an explicit sharp-libvips dependency (Windows, wasm)
 if (platform.startsWith('win') || platform.startsWith('wasm')) {
   const libvipsPlatform = platform === 'wasm32' ? 'dev-wasm32' : platform;
-  const sharpLibvipsDir = join(require(`@img/sharp-libvips-${libvipsPlatform}/lib`), '..');
+  const sharpLibvipsDir = join(
+    require(`@img/sharp-libvips-${libvipsPlatform}/lib`),
+    '..'
+  );
   // Copy versions.json
-  copyFileSync(join(sharpLibvipsDir, 'versions.json'), join(destDir, 'versions.json'));
+  copyFileSync(
+    join(sharpLibvipsDir, 'versions.json'),
+    join(destDir, 'versions.json')
+  );
   // Append third party licensing to README
-  const libvipsReadme = readFileSync(join(sharpLibvipsDir, 'README.md'), { encoding: 'utf-8' });
-  const thirdParty = libvipsReadme.substring(libvipsReadme.indexOf('\nThis software contains'));
+  const libvipsReadme = readFileSync(join(sharpLibvipsDir, 'README.md'), {
+    encoding: 'utf-8'
+  });
+  const thirdParty = libvipsReadme.substring(
+    libvipsReadme.indexOf('\nThis software contains')
+  );
   appendFileSync(join(destDir, 'README.md'), thirdParty);
 }

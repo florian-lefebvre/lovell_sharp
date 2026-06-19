@@ -20,8 +20,12 @@ suite('Tint', () => {
       .tint('#FF0000')
       .toFile(output);
     t.assert.strictEqual(true, info.size > 0);
-    t.assert.doesNotThrow(
-      () => fixtures.assertMaxColourDistance(output, fixtures.expected('tint-red.jpg'), maxDistance)
+    t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('tint-red.jpg'),
+        maxDistance
+      )
     );
   });
 
@@ -33,8 +37,12 @@ suite('Tint', () => {
       .tint('#00FF00')
       .toFile(output);
     t.assert.strictEqual(true, info.size > 0);
-    t.assert.doesNotThrow(
-      () => fixtures.assertMaxColourDistance(output, fixtures.expected('tint-green.jpg'), maxDistance)
+    t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('tint-green.jpg'),
+        maxDistance
+      )
     );
   });
 
@@ -46,8 +54,12 @@ suite('Tint', () => {
       .tint('#0000FF')
       .toFile(output);
     t.assert.strictEqual(true, info.size > 0);
-    t.assert.doesNotThrow(
-      () => fixtures.assertMaxColourDistance(output, fixtures.expected('tint-blue.jpg'), maxDistance)
+    t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('tint-blue.jpg'),
+        maxDistance
+      )
     );
   });
 
@@ -60,8 +72,12 @@ suite('Tint', () => {
       .toFile(output);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    t.assert.doesNotThrow(
-      () => fixtures.assertMaxColourDistance(output, fixtures.expected('tint-sepia.jpg'), maxDistance)
+    t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('tint-sepia.jpg'),
+        maxDistance
+      )
     );
   });
 
@@ -74,8 +90,12 @@ suite('Tint', () => {
       .toFile(output);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    t.assert.doesNotThrow(
-      () => fixtures.assertMaxColourDistance(output, fixtures.expected('tint-sepia.jpg'), maxDistance)
+    t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('tint-sepia.jpg'),
+        maxDistance
+      )
     );
   });
 
@@ -88,8 +108,12 @@ suite('Tint', () => {
       .toFile(output);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    t.assert.doesNotThrow(
-      () => fixtures.assertMaxColourDistance(output, fixtures.expected('tint-alpha.png'), maxDistance)
+    t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('tint-alpha.png'),
+        maxDistance
+      )
     );
   });
 
@@ -101,8 +125,12 @@ suite('Tint', () => {
       .tint('#FF0000')
       .toFile(output);
     t.assert.strictEqual(true, info.size > 0);
-    t.assert.doesNotThrow(
-      () => fixtures.assertMaxColourDistance(output, fixtures.expected('tint-cmyk.jpg'), maxDistance)
+    t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('tint-cmyk.jpg'),
+        maxDistance
+      )
     );
   });
 });

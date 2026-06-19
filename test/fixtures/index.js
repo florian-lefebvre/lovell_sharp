@@ -12,7 +12,7 @@ const getPath = (filename) => path.join(__dirname, filename);
 
 // Generates a 64-bit-as-binary-string image fingerprint
 // Based on the dHash gradient method - see http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
-async function fingerprint (image) {
+async function fingerprint(image) {
   return sharp(image)
     .flatten('gray')
     .greyscale()
@@ -24,8 +24,8 @@ async function fingerprint (image) {
       let fingerprint = '';
       for (let col = 0; col < 8; col++) {
         for (let row = 0; row < 8; row++) {
-          const left = data[(row * 8) + col];
-          const right = data[(row * 8) + col + 1];
+          const left = data[row * 8 + col];
+          const right = data[row * 8 + col + 1];
           fingerprint = fingerprint + (left < right ? '1' : '0');
         }
       }
@@ -34,7 +34,6 @@ async function fingerprint (image) {
 }
 
 module.exports = {
-
   inputJpgWithLandscapeExif1: getPath('Landscape_1.jpg'), // https://github.com/recurser/exif-orientation-examples
   inputJpgWithLandscapeExif2: getPath('Landscape_2.jpg'), // https://github.com/recurser/exif-orientation-examples
   inputJpgWithLandscapeExif3: getPath('Landscape_3.jpg'), // https://github.com/recurser/exif-orientation-examples
@@ -59,7 +58,9 @@ module.exports = {
   inputJpgWithExifMirroring: getPath('Landscape_5.jpg'), // https://github.com/recurser/exif-orientation-examples/blob/master/Landscape_5.jpg
   inputJpgWithGammaHoliness: getPath('gamma_dalai_lama_gray.jpg'), // http://www.4p8.com/eric.brasseur/gamma.html
   inputJpgWithCmykProfile: getPath('Channel_digital_image_CMYK_color.jpg'), // http://en.wikipedia.org/wiki/File:Channel_digital_image_CMYK_color.jpg
-  inputJpgWithCmykNoProfile: getPath('Channel_digital_image_CMYK_color_no_profile.jpg'),
+  inputJpgWithCmykNoProfile: getPath(
+    'Channel_digital_image_CMYK_color_no_profile.jpg'
+  ),
   inputJpgWithCorruptHeader: getPath('corrupt-header.jpg'),
   inputJpgWithLowContrast: getPath('low-contrast.jpg'), // http://www.flickr.com/photos/grizdave/2569067123/
   inputJpgLarge: getPath('giant-image.jpg'),
@@ -85,8 +86,12 @@ module.exports = {
   inputPng16BitGreyAlpha: getPath('16-bit-grey-alpha.png'), // CC-BY-NC-SA florc http://www.colourlovers.com/pattern/50713/pat
   inputPngOverlayLayer0: getPath('alpha-layer-0-background.png'),
   inputPngOverlayLayer1: getPath('alpha-layer-1-fill.png'),
-  inputPngAlphaPremultiplicationSmall: getPath('alpha-premultiply-1024x768-paper.png'),
-  inputPngAlphaPremultiplicationLarge: getPath('alpha-premultiply-2048x1536-paper.png'),
+  inputPngAlphaPremultiplicationSmall: getPath(
+    'alpha-premultiply-1024x768-paper.png'
+  ),
+  inputPngAlphaPremultiplicationLarge: getPath(
+    'alpha-premultiply-2048x1536-paper.png'
+  ),
   inputPngBooleanNoAlpha: getPath('bandbool.png'),
   inputPngTestJoinChannel: getPath('testJoinChannel.png'),
   inputPngTruncated: getPath('truncated.png'), // gm convert 2569067123_aca715a2ee_o.jpg -resize 320x240 saw.png ; head -c 10000 saw.png > truncated.png
@@ -99,7 +104,9 @@ module.exports = {
   inputPngTrimIncludeAlpha: getPath('trim-mc.png'), // https://github.com/lovell/sharp/issues/2166
   inputPngTrimSpecificColour: getPath('Flag_of_the_Netherlands.png'), // https://commons.wikimedia.org/wiki/File:Flag_of_the_Netherlands.svg
   inputPngTrimSpecificColour16bit: getPath('Flag_of_the_Netherlands-16bit.png'), // convert Flag_of_the_Netherlands.png -depth 16 Flag_of_the_Netherlands-16bit.png
-  inputPngTrimSpecificColourIncludeAlpha: getPath('Flag_of_the_Netherlands-alpha.png'), // convert Flag_of_the_Netherlands.png -alpha set -background none -channel A -evaluate multiply 0.5 +channel Flag_of_the_Netherlands-alpha.png
+  inputPngTrimSpecificColourIncludeAlpha: getPath(
+    'Flag_of_the_Netherlands-alpha.png'
+  ), // convert Flag_of_the_Netherlands.png -alpha set -background none -channel A -evaluate multiply 0.5 +channel Flag_of_the_Netherlands-alpha.png
   inputPngUint32Limit: getPath('65536-uint32-limit.png'), // https://alexandre.alapetite.fr/doc-alex/large-image/
   inputPngWithProPhotoProfile: getPath('prophoto.png'),
 
@@ -161,7 +168,10 @@ module.exports = {
     if (typeof options === 'undefined' || options === null) {
       options = {};
     }
-    if (options.threshold === null || typeof options.threshold === 'undefined') {
+    if (
+      options.threshold === null ||
+      typeof options.threshold === 'undefined'
+    ) {
       options.threshold = 5; // ~7% threshold
     }
     if (typeof options.threshold !== 'number') {
@@ -180,7 +190,9 @@ module.exports = {
         }
       }
       if (distance > options.threshold) {
-        throw new Error(`Expected maximum similarity distance: ${options.threshold}. Actual: ${distance}.`);
+        throw new Error(
+          `Expected maximum similarity distance: ${options.threshold}. Actual: ${distance}.`
+        );
       }
     } catch (err) {
       if (callback) {
@@ -193,12 +205,20 @@ module.exports = {
     }
   },
 
-  assertMaxColourDistance: (actualImagePath, expectedImagePath, acceptedDistance) => {
+  assertMaxColourDistance: (
+    actualImagePath,
+    expectedImagePath,
+    acceptedDistance
+  ) => {
     if (typeof actualImagePath !== 'string') {
-      throw new TypeError(`\`actualImagePath\` must be a string; got ${actualImagePath}`);
+      throw new TypeError(
+        `\`actualImagePath\` must be a string; got ${actualImagePath}`
+      );
     }
     if (typeof expectedImagePath !== 'string') {
-      throw new TypeError(`\`expectedImagePath\` must be a string; got ${expectedImagePath}`);
+      throw new TypeError(
+        `\`expectedImagePath\` must be a string; got ${expectedImagePath}`
+      );
     }
     if (typeof acceptedDistance !== 'number') {
       // Default threshold
@@ -206,8 +226,9 @@ module.exports = {
     }
     const distance = maxColourDistance(actualImagePath, expectedImagePath);
     if (distance > acceptedDistance) {
-      throw new Error(`Expected maximum absolute distance of ${acceptedDistance}, actual ${distance}`);
+      throw new Error(
+        `Expected maximum absolute distance of ${acceptedDistance}, actual ${distance}`
+      );
     }
   }
-
 };

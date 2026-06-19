@@ -28,17 +28,24 @@ sharp('input.png')
   .rotate(180)
   .resize(300)
   .flatten({ background: '#ff6600' })
-  .composite([{ input: 'overlay.png', gravity: sharp.gravity.southeast, animated: false, failOn: 'warning' }])
+  .composite([
+    {
+      input: 'overlay.png',
+      gravity: sharp.gravity.southeast,
+      animated: false,
+      failOn: 'warning'
+    }
+  ])
   .sharpen()
   .withMetadata()
   .withMetadata({
     density: 96,
     orientation: 8,
     icc: 'some/path',
-    exif: { IFD0: { Copyright: 'Wernham Hogg' } },
+    exif: { IFD0: { Copyright: 'Wernham Hogg' } }
   })
   .webp({
-    quality: 90,
+    quality: 90
   })
   .toBuffer()
   .then((outputBuffer: Buffer) => {
@@ -51,7 +58,7 @@ sharp('input.png')
   .keepMetadata()
   .toFile('output.png', (err, info) => {
     // output.png is an image containing input.png along with all metadata(EXIF, ICC, XMP, IPTC) from input.png
-  })
+  });
 
 sharp(input).withDensity(300);
 
@@ -62,7 +69,11 @@ sharp('input.jpg')
     // containing a scaled and cropped version of input.jpg
   });
 
-sharp('input.jpg').resize({ width: 300 }).blur(false).blur(true).toFile('output.jpg');
+sharp('input.jpg')
+  .resize({ width: 300 })
+  .blur(false)
+  .blur(true)
+  .toFile('output.jpg');
 
 sharp().blur();
 sharp().blur(1);
@@ -75,8 +86,8 @@ sharp({
     width: 300,
     height: 200,
     channels: 4,
-    background: { r: 255, g: 0, b: 0, alpha: 128 },
-  },
+    background: { r: 255, g: 0, b: 0, alpha: 128 }
+  }
 })
   .png()
   .toBuffer();
@@ -89,7 +100,9 @@ let transformer = sharp()
 readableStream.pipe(transformer).pipe(writableStream);
 
 sharp().toUint8Array();
-sharp().toUint8Array().then(({ data }) => data.byteLength);
+sharp()
+  .toUint8Array()
+  .then(({ data }) => data.byteLength);
 
 console.log(sharp.format);
 console.log(sharp.versions);
@@ -100,7 +113,10 @@ sharp.queue.on('change', (queueLength: number) => {
 
 let pipeline: sharp.Sharp = sharp().rotate();
 pipeline.clone().resize(800, 600).pipe(writableStream);
-pipeline.clone().extract({ left: 20, top: 20, width: 100, height: 100 }).pipe(writableStream);
+pipeline
+  .clone()
+  .extract({ left: 20, top: 20, width: 100, height: 100 })
+  .pipe(writableStream);
 readableStream.pipe(pipeline);
 // firstWritableStream receives auto-rotated, resized readableStream
 // secondWritableStream receives auto-rotated, extracted region of readableStream
@@ -154,7 +170,7 @@ sharp(input)
   .convolve({
     width: 3,
     height: 3,
-    kernel: [-1, 0, 1, -2, 0, 2, -1, 0, 1],
+    kernel: [-1, 0, 1, -2, 0, 2, -1, 0, 1]
   })
   .raw()
   .toBuffer((err: Error, data: Buffer, info: sharp.OutputInfo) => {
@@ -165,7 +181,7 @@ sharp(input)
 sharp('input.tiff')
   .png()
   .tile({
-    size: 512,
+    size: 512
   })
   .toFile('output.dz', (err: Error, info: sharp.OutputInfo) => {
     // output.dzi is the Deep Zoom XML definition
@@ -178,7 +194,7 @@ sharp('input.tiff')
     size: 512,
     center: true,
     layout: 'iiif3',
-    id: 'https://my.image.host/iiif',
+    id: 'https://my.image.host/iiif'
   })
   .toFile('output');
 
@@ -187,7 +203,7 @@ sharp(input)
     fit: 'contain',
     position: 'north',
     kernel: sharp.kernel.lanczos2,
-    background: 'white',
+    background: 'white'
   })
   .toFile('output.tiff')
   .then(() => {
@@ -201,7 +217,7 @@ sharp(input).resize({ kernel: 'mks2013' });
 transformer = sharp()
   .resize(200, 200, {
     fit: 'cover',
-    position: sharp.strategy.entropy,
+    position: sharp.strategy.entropy
   })
   .on('error', (err: Error) => {
     console.log(err);
@@ -214,7 +230,7 @@ sharp('input.gif')
   .resize(200, 300, {
     fit: 'contain',
     position: 'north',
-    background: { r: 0, g: 0, b: 0, alpha: 0 },
+    background: { r: 0, g: 0, b: 0, alpha: 0 }
   })
   .toFormat(sharp.format.webp)
   .toBuffer((err: Error, outputBuffer: Buffer) => {
@@ -306,14 +322,14 @@ sharp('input.gif')
   .recomb([
     [0.3588, 0.7044, 0.1368],
     [0.299, 0.587, 0.114],
-    [0.2392, 0.4696, 0.0912],
+    [0.2392, 0.4696, 0.0912]
   ])
 
   .recomb([
-    [1,0,0,0],
-    [0,1,0,0],
-    [0,0,1,0],
-    [0,0,0,1],
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1]
   ])
 
   .modulate({ brightness: 2 })
@@ -344,7 +360,7 @@ sharp(input).jpeg().jpeg({}).jpeg({
   quantizationTable: 10,
   mozjpeg: false,
   quality: 10,
-  force: false,
+  force: false
 });
 
 sharp(input).png().png({}).png({
@@ -356,7 +372,7 @@ sharp(input).png().png({}).png({
   palette: false,
   colours: 10,
   colors: 10,
-  dither: 10,
+  dither: 10
 });
 
 sharp(input)
@@ -365,7 +381,14 @@ sharp(input)
   .avif({ quality: 50, lossless: false, effort: 5, chromaSubsampling: '4:2:0' })
   .heif()
   .heif({})
-  .heif({ quality: 50, compression: 'hevc', lossless: false, effort: 5, chromaSubsampling: '4:2:0', tune: 'psnr' })
+  .heif({
+    quality: 50,
+    compression: 'hevc',
+    lossless: false,
+    effort: 5,
+    chromaSubsampling: '4:2:0',
+    tune: 'psnr'
+  })
   .toBuffer({ resolveWithObject: true })
   .then(({ data, info }) => {
     console.log(data);
@@ -399,10 +422,10 @@ sharp(input)
 
 sharp('input.jpg')
   .stats()
-  .then(stats => {
+  .then((stats) => {
     const {
       sharpness,
-      dominant: { r, g, b },
+      dominant: { r, g, b }
     } = stats;
     console.log(sharpness);
     console.log(`${r}, ${g}, ${b}`);
@@ -410,7 +433,13 @@ sharp('input.jpg')
 
 // From https://sharp.pixelplumbing.com/api-output#examples-9
 // Extract alpha channel as raw pixel data from PNG input
-sharp('input.png').ensureAlpha().ensureAlpha(0).extractChannel(3).toColourspace('b-w').raw().toBuffer();
+sharp('input.png')
+  .ensureAlpha()
+  .ensureAlpha(0)
+  .extractChannel(3)
+  .toColourspace('b-w')
+  .raw()
+  .toBuffer();
 
 // From https://sharp.pixelplumbing.com/api-constructor#examples-4
 // Convert an animated GIF to an animated WebP
@@ -424,20 +453,24 @@ sharp({
     channels: 4,
     height: 25000,
     width: 25000,
-    pageHeight: 1000,
+    pageHeight: 1000
   },
-  limitInputPixels: false,
+  limitInputPixels: false
 })
   .toFormat('png')
   .toBuffer()
-  .then(largeImage => sharp(input).composite([{ input: largeImage, limitInputPixels: false }]));
+  .then((largeImage) =>
+    sharp(input).composite([{ input: largeImage, limitInputPixels: false }])
+  );
 
 // Taken from API documentation at
 // https://sharp.pixelplumbing.com/api-operation#clahe
 // introduced
 sharp('input.jpg').clahe({ width: 10, height: 10 }).toFile('output.jpg');
 
-sharp('input.jpg').clahe({ width: 10, height: 10, maxSlope: 5 }).toFile('outfile.jpg');
+sharp('input.jpg')
+  .clahe({ width: 10, height: 10, maxSlope: 5 })
+  .toFile('outfile.jpg');
 
 // Support `unlimited` input option
 sharp('input.png', { unlimited: true }).resize(320, 240).toFile('outfile.png');
@@ -452,9 +485,9 @@ sharp({
     noise: {
       type: 'gaussian',
       mean: 128,
-      sigma: 30,
-    },
-  },
+      sigma: 30
+    }
+  }
 })
   .png()
   .toFile('output.png');
@@ -478,7 +511,7 @@ sharp(input)
 sharp(input)
   .resize(129, 111)
   .gamma(2.2, 3.0)
-  .toBuffer(err => {
+  .toBuffer((err) => {
     if (err) throw err;
   });
 
@@ -494,13 +527,13 @@ sharp('16bpc.png')
 // Output channels are constrained from 1-4, can be used as raw input
 sharp(input)
   .toBuffer({ resolveWithObject: true })
-  .then(result => {
+  .then((result) => {
     const newImg = sharp(result.data, {
       raw: {
         channels: result.info.channels,
         width: result.info.width,
-        height: result.info.height,
-      },
+        height: result.info.height
+      }
     });
 
     return newImg.toBuffer();
@@ -549,7 +582,9 @@ sharp('input.tiff').jxl({ lossless: true }).toFile('out.jxl');
 sharp('input.tiff').jxl({ effort: 7 }).toFile('out.jxl');
 
 // Support webp options
-sharp('input.tiff').webp({ minSize: true, mixed: true, exact: true }).toFile('out.webp');
+sharp('input.tiff')
+  .webp({ minSize: true, mixed: true, exact: true })
+  .toFile('out.webp');
 
 // 'failOn' input param
 sharp('input.tiff', { failOn: 'none' });
@@ -567,7 +602,7 @@ sharp('input.tiff')
     m2: 3,
     x1: 3,
     y2: 15,
-    y3: 15,
+    y3: 15
   })
   .toBuffer();
 
@@ -575,12 +610,12 @@ sharp('input.tiff')
 sharp().affine(
   [
     [1, 0.3],
-    [0.1, 0.7],
+    [0.1, 0.7]
   ],
   {
     background: 'white',
-    interpolator: sharp.interpolators.nohalo,
-  },
+    interpolator: sharp.interpolators.nohalo
+  }
 );
 
 sharp().affine([1, 1, 1, 1], {
@@ -588,7 +623,7 @@ sharp().affine([1, 1, 1, 1], {
   idx: 0,
   idy: 0,
   odx: 0,
-  ody: 0,
+  ody: 0
 });
 
 const bicubic: string = sharp.interpolators.bicubic;
@@ -596,12 +631,15 @@ const bilinear: string = sharp.interpolators.bilinear;
 const locallyBoundedBicubic: string = sharp.interpolators.locallyBoundedBicubic;
 const nearest: string = sharp.interpolators.nearest;
 const nohalo: string = sharp.interpolators.nohalo;
-const vertexSplitQuadraticBasisSpline: string = sharp.interpolators.vertexSplitQuadraticBasisSpline;
+const vertexSplitQuadraticBasisSpline: string =
+  sharp.interpolators.vertexSplitQuadraticBasisSpline;
 
 // Triming
 sharp(input).trim({ background: '#000' }).toBuffer();
 sharp(input).trim({ threshold: 10, lineArt: true }).toBuffer();
-sharp(input).trim({ background: '#bf1942', threshold: 30, margin: 20 }).toBuffer();
+sharp(input)
+  .trim({ background: '#bf1942', threshold: 30, margin: 20 })
+  .toBuffer();
 
 // Text input
 sharp({
@@ -616,12 +654,12 @@ sharp({
     rgba: true,
     justify: true,
     spacing: 10,
-    wrap: 'word-char',
-  },
+    wrap: 'word-char'
+  }
 })
   .png()
   .toBuffer({ resolveWithObject: true })
-  .then(out => {
+  .then((out) => {
     console.log(out.info.textAutofitDpi);
   });
 
@@ -631,10 +669,10 @@ sharp('input.png').composite([
     input: {
       text: {
         text: 'Okay then',
-        font: 'Comic Sans',
-      },
-    },
-  },
+        font: 'Comic Sans'
+      }
+    }
+  }
 ]);
 
 // From https://github.com/lovell/sharp/pull/1835
@@ -643,24 +681,24 @@ sharp('input.png').composite([
     input: {
       text: {
         text: 'Okay then',
-        font: 'Comic Sans',
-      },
+        font: 'Comic Sans'
+      }
     },
     blend: 'color-burn',
     top: 0,
     left: 0,
-    premultiplied: true,
-  },
+    premultiplied: true
+  }
 ]);
 
 // https://github.com/lovell/sharp/pull/402
-(['fs', 'zip'] as const).forEach(container => {
+(['fs', 'zip'] as const).forEach((container) => {
   sharp().tile({ container });
 });
 
 // From https://github.com/lovell/sharp/issues/2238
 sharp('input.png').tile({
-  basename: 'output.dz.tiles',
+  basename: 'output.dz.tiles'
 });
 
 // https://github.com/lovell/sharp/issues/3669
@@ -670,10 +708,10 @@ sharp(input).composite([
       width: 1,
       height: 1,
       channels: 1,
-      premultiplied: false,
+      premultiplied: false
     },
     sequentialRead: false,
-    unlimited: true,
+    unlimited: true
   }
 ]);
 
@@ -708,23 +746,23 @@ sharp(input)
 // https://github.com/lovell/sharp/pull/4048
 sharp(input).composite([
   {
-    input: 'image.gif', 
-    animated: true, 
-    limitInputPixels: 536805378, 
-    density: 144, 
-    failOn: "warning",
+    input: 'image.gif',
+    animated: true,
+    limitInputPixels: 536805378,
+    density: 144,
+    failOn: 'warning',
     autoOrient: true
   }
-])
+]);
 sharp(input).composite([
   {
-    input: 'image.png',  
+    input: 'image.png',
     animated: false,
-    limitInputPixels: 178935126, 
-    density: 72, 
-    failOn: "truncated"
+    limitInputPixels: 178935126,
+    density: 72,
+    failOn: 'truncated'
   }
-])
+]);
 
 // Support format-specific input options
 const colour: sharp.Colour = '#fff';
@@ -739,9 +777,9 @@ sharp({ openSlide: { level: 0 } });
 sharp({ level: 0 }); // Deprecated
 sharp({ jp2: { oneshot: true } });
 sharp({ jp2: { oneshot: false } });
-sharp({ svg: { stylesheet: 'test' }});
-sharp({ svg: { highBitdepth: true }});
-sharp({ svg: { highBitdepth: false }});
+sharp({ svg: { stylesheet: 'test' } });
+sharp({ svg: { highBitdepth: true } });
+sharp({ svg: { highBitdepth: false } });
 
 // Raw input options
 const raw: sharp.Raw = { width: 1, height: 1, channels: 3 };
@@ -814,8 +852,10 @@ sharp({ limitInputChannels: false });
 sharp({ limitInputChannels: 'fail' });
 sharp(input).composite([{ limitInputChannels: 6 }]);
 
-sharp().metadata().then((metadata: sharp.Metadata) => {
-  if (metadata.mediaType) {
-    const mediaType: sharp.MediaType = metadata.mediaType;
-  }
-});
+sharp()
+  .metadata()
+  .then((metadata: sharp.Metadata) => {
+    if (metadata.mediaType) {
+      const mediaType: sharp.MediaType = metadata.mediaType;
+    }
+  });

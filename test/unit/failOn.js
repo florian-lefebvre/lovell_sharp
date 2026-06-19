@@ -12,13 +12,17 @@ const fixtures = require('../fixtures');
 suite('failOn', () => {
   test('handles truncated JPEG', async (t) => {
     t.plan(4);
-    const { data, info } = await sharp(fixtures.inputJpgTruncated, { failOn: 'none' })
+    const { data, info } = await sharp(fixtures.inputJpgTruncated, {
+      failOn: 'none'
+    })
       .resize(32, 24)
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(32, info.width);
     t.assert.strictEqual(24, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('truncated.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('truncated.jpg'), data)
+    );
   });
 
   test('handles truncated PNG, emits warnings', async (t) => {
@@ -27,8 +31,10 @@ suite('failOn', () => {
     const { info } = await sharp(fixtures.inputPngTruncated, { failOn: 'none' })
       .on('warning', (warning) => {
         t.assert.ok(
-          ['read gave 2 warnings', 'not enough data', 'end of stream']
-            .some(m => warning.includes(m)));
+          ['read gave 2 warnings', 'not enough data', 'end of stream'].some(
+            (m) => warning.includes(m)
+          )
+        );
         isWarningEmitted = true;
       })
       .resize(32, 24)
@@ -54,22 +60,26 @@ suite('failOn', () => {
 
   test('returns errors to callback for truncated JPEG', (t, done) => {
     t.plan(3);
-    sharp(fixtures.inputJpgTruncated, { failOn: 'truncated' }).toBuffer((err, data, info) => {
-      t.assert.ok(err.message.includes('VipsJpeg: premature end of'), err);
-      t.assert.strictEqual(data, undefined);
-      t.assert.strictEqual(info, undefined);
-      done();
-    });
+    sharp(fixtures.inputJpgTruncated, { failOn: 'truncated' }).toBuffer(
+      (err, data, info) => {
+        t.assert.ok(err.message.includes('VipsJpeg: premature end of'), err);
+        t.assert.strictEqual(data, undefined);
+        t.assert.strictEqual(info, undefined);
+        done();
+      }
+    );
   });
 
   test('returns errors to callback for truncated PNG', (t, done) => {
     t.plan(3);
-    sharp(fixtures.inputPngTruncated, { failOn: 'truncated' }).toBuffer((err, data, info) => {
-      t.assert.ok(err.message.includes('read error'), err);
-      t.assert.strictEqual(data, undefined);
-      t.assert.strictEqual(info, undefined);
-      done();
-    });
+    sharp(fixtures.inputPngTruncated, { failOn: 'truncated' }).toBuffer(
+      (err, data, info) => {
+        t.assert.ok(err.message.includes('read error'), err);
+        t.assert.strictEqual(data, undefined);
+        t.assert.strictEqual(info, undefined);
+        done();
+      }
+    );
   });
 
   test('rejects promises for truncated JPEG', async (t) => {

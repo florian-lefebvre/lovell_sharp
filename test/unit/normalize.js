@@ -75,10 +75,10 @@ suite('Normalization', () => {
   test('does not alter images with only one color', async (t) => {
     t.plan(1);
     const output = fixtures.path('output.unmodified-png-with-one-color.png');
-    await sharp(fixtures.inputPngWithOneColor)
-      .normalize()
-      .toFile(output);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(output, fixtures.inputPngWithOneColor, 0));
+    await sharp(fixtures.inputPngWithOneColor).normalize().toFile(output);
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(output, fixtures.inputPngWithOneColor, 0)
+    );
   });
 
   test('works with 16-bit RGBA images', async (t) => {

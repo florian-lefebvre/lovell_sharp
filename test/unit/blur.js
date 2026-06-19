@@ -18,7 +18,9 @@ suite('Blur', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('blur-1.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('blur-1.jpg'), data)
+    );
   });
 
   test('specific radius 10', async (t) => {
@@ -30,7 +32,9 @@ suite('Blur', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('blur-10.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('blur-10.jpg'), data)
+    );
   });
 
   test('specific options.sigma 10', async (t) => {
@@ -42,7 +46,9 @@ suite('Blur', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('blur-10.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('blur-10.jpg'), data)
+    );
   });
 
   test('specific radius 0.3', async (t) => {
@@ -54,7 +60,9 @@ suite('Blur', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('blur-0.3.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('blur-0.3.jpg'), data)
+    );
   });
 
   test('mild blur', async (t) => {
@@ -66,7 +74,9 @@ suite('Blur', () => {
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(320, info.width);
     t.assert.strictEqual(240, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('blur-mild.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('blur-mild.jpg'), data)
+    );
   });
 
   test('invalid radius', (t) => {
@@ -127,7 +137,9 @@ suite('Blur', () => {
       .toBuffer();
 
     t.assert.notDeepEqual(approximate, integer);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('blur-10.jpg'), approximate));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('blur-10.jpg'), approximate)
+    );
   });
 
   test('specific radius 10 and minAmplitude 0.01', async (t) => {
@@ -142,7 +154,9 @@ suite('Blur', () => {
       .toBuffer();
 
     t.assert.notDeepEqual(minAmplitudeLow, minAmplitudeDefault);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('blur-10.jpg'), minAmplitudeLow));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('blur-10.jpg'), minAmplitudeLow)
+    );
   });
 
   test('options.sigma is required if options object is passed', (t) => {

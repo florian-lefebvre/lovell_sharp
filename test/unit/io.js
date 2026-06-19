@@ -33,7 +33,9 @@ suite('Input/output', () => {
     });
     sharp(fixtures.inputJpg).resize(320, 240).pipe(writable);
     await closed;
-    const { data, info } = await sharp(outputJpg).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(outputJpg).toBuffer({
+      resolveWithObject: true
+    });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual(data.length, info.size);
     t.assert.strictEqual('jpeg', info.format);
@@ -52,7 +54,9 @@ suite('Input/output', () => {
     });
     sharp(inputJpgBuffer).resize(320, 240).pipe(writable);
     await closed;
-    const { data, info } = await sharp(outputJpg).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(outputJpg).toBuffer({
+      resolveWithObject: true
+    });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual(data.length, info.size);
     t.assert.strictEqual('jpeg', info.format);
@@ -64,30 +68,34 @@ suite('Input/output', () => {
   test('Read from Stream and write to File via callback', (t, done) => {
     t.plan(4);
     const readable = createReadStream(fixtures.inputJpg);
-    const pipeline = sharp().resize(320, 240).toFile(outputJpg, async (err, info) => {
-      if (err) throw err;
-      t.assert.strictEqual(true, info.size > 0);
-      t.assert.strictEqual('jpeg', info.format);
-      t.assert.strictEqual(320, info.width);
-      t.assert.strictEqual(240, info.height);
-      await fs.rm(outputJpg);
-      done();
-    });
+    const pipeline = sharp()
+      .resize(320, 240)
+      .toFile(outputJpg, async (err, info) => {
+        if (err) throw err;
+        t.assert.strictEqual(true, info.size > 0);
+        t.assert.strictEqual('jpeg', info.format);
+        t.assert.strictEqual(320, info.width);
+        t.assert.strictEqual(240, info.height);
+        await fs.rm(outputJpg);
+        done();
+      });
     readable.pipe(pipeline);
   });
 
   test('Read from Stream and write to Buffer via callback', (t, done) => {
     t.plan(5);
     const readable = createReadStream(fixtures.inputJpg);
-    const pipeline = sharp().resize(320, 240).toBuffer((err, data, info) => {
-      if (err) throw err;
-      t.assert.strictEqual(true, data.length > 0);
-      t.assert.strictEqual(data.length, info.size);
-      t.assert.strictEqual('jpeg', info.format);
-      t.assert.strictEqual(320, info.width);
-      t.assert.strictEqual(240, info.height);
-      done();
-    });
+    const pipeline = sharp()
+      .resize(320, 240)
+      .toBuffer((err, data, info) => {
+        if (err) throw err;
+        t.assert.strictEqual(true, data.length > 0);
+        t.assert.strictEqual(data.length, info.size);
+        t.assert.strictEqual('jpeg', info.format);
+        t.assert.strictEqual(320, info.width);
+        t.assert.strictEqual(240, info.height);
+        done();
+      });
     readable.pipe(pipeline);
   });
 
@@ -150,7 +158,9 @@ suite('Input/output', () => {
     const pipeline = sharp().resize(320, 240);
     readable.pipe(pipeline).pipe(writable);
     await closed;
-    const { data, info } = await sharp(outputJpg).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(outputJpg).toBuffer({
+      resolveWithObject: true
+    });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual(data.length, info.size);
     t.assert.strictEqual('jpeg', info.format);
@@ -215,8 +225,14 @@ suite('Input/output', () => {
     t.plan(3);
     // since a Uint8ClampedArray is the same as Uint8Array but clamps the values
     // between 0-255 it seemed good to add this also
-    const uint8array = Uint8ClampedArray.from([0, 0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255]);
-    const uint8ArrayWithByteOffset = new Uint8ClampedArray(uint8array.buffer, 3, 6);
+    const uint8array = Uint8ClampedArray.from([
+      0, 0, 0, 255, 255, 255, 0, 0, 0, 255, 255, 255
+    ]);
+    const uint8ArrayWithByteOffset = new Uint8ClampedArray(
+      uint8array.buffer,
+      3,
+      6
+    );
     const { data, info } = await sharp(uint8ArrayWithByteOffset, {
       raw: {
         width: 2,
@@ -225,7 +241,10 @@ suite('Input/output', () => {
       }
     }).toBuffer({ resolveWithObject: true });
 
-    t.assert.deepStrictEqual(Uint8ClampedArray.from([255, 255, 255, 0, 0, 0]), new Uint8ClampedArray(data));
+    t.assert.deepStrictEqual(
+      Uint8ClampedArray.from([255, 255, 255, 0, 0, 0]),
+      new Uint8ClampedArray(data)
+    );
     t.assert.strictEqual(info.width, 2);
     t.assert.strictEqual(info.height, 1);
   });
@@ -325,7 +344,9 @@ suite('Input/output', () => {
       pipeline.pipe(writable);
     });
     await closed;
-    const { data, info } = await sharp(outputJpg).toBuffer({ resolveWithObject: true });
+    const { data, info } = await sharp(outputJpg).toBuffer({
+      resolveWithObject: true
+    });
     t.assert.strictEqual(true, data.length > 0);
     t.assert.strictEqual(data.length, info.size);
     t.assert.strictEqual('jpeg', info.format);
@@ -360,7 +381,9 @@ suite('Input/output', () => {
 
   test('Sequential read, force JPEG', async (t) => {
     t.plan(5);
-    const { data, info } = await sharp(fixtures.inputJpg, { sequentialRead: true })
+    const { data, info } = await sharp(fixtures.inputJpg, {
+      sequentialRead: true
+    })
       .resize(320, 240)
       .toFormat(sharp.format.jpeg)
       .toBuffer({ resolveWithObject: true });
@@ -373,7 +396,9 @@ suite('Input/output', () => {
 
   test('Not sequential read, force JPEG', async (t) => {
     t.plan(5);
-    const { data, info } = await sharp(fixtures.inputJpg, { sequentialRead: false })
+    const { data, info } = await sharp(fixtures.inputJpg, {
+      sequentialRead: false
+    })
       .resize(320, 240)
       .toFormat('jpeg')
       .toBuffer({ resolveWithObject: true });
@@ -464,7 +489,10 @@ suite('Input/output', () => {
     try {
       await sharp(Buffer.from([0x1, 0x2, 0x3, 0x4])).toBuffer();
     } catch (err) {
-      t.assert.strictEqual(err.message, 'Input buffer contains unsupported image format');
+      t.assert.strictEqual(
+        err.message,
+        'Input buffer contains unsupported image format'
+      );
       t.assert.strictEqual(true, err.stack.includes('at Sharp.toBuffer'));
       t.assert.strictEqual(true, err.stack.includes(__filename));
     }
@@ -475,7 +503,10 @@ suite('Input/output', () => {
     try {
       await sharp('does-not-exist').toFile('fail');
     } catch (err) {
-      t.assert.strictEqual(err.message, 'Input file is missing: does-not-exist');
+      t.assert.strictEqual(
+        err.message,
+        'Input file is missing: does-not-exist'
+      );
       t.assert.strictEqual(true, err.stack.includes('at Sharp.toFile'));
       t.assert.strictEqual(true, err.stack.includes(__filename));
     }
@@ -526,7 +557,9 @@ suite('Input/output', () => {
 
   test('File input with corrupt header fails gracefully', async (t) => {
     t.plan(1);
-    await t.assert.rejects(() => sharp(fixtures.inputJpgWithCorruptHeader).toBuffer());
+    await t.assert.rejects(() =>
+      sharp(fixtures.inputJpgWithCorruptHeader).toBuffer()
+    );
   });
 
   test('Buffer input with corrupt header fails gracefully', async (t) => {
@@ -677,24 +710,31 @@ suite('Input/output', () => {
 
   test('can ignore ICC profile', async (t) => {
     t.plan(1);
-    const [r1, g1, b1] = await sharp(fixtures.inputJpgWithPortraitExif5, { ignoreIcc: true })
+    const [r1, g1, b1] = await sharp(fixtures.inputJpgWithPortraitExif5, {
+      ignoreIcc: true
+    })
       .extract({ width: 1, height: 1, top: 16, left: 16 })
       .raw()
       .toBuffer();
 
-    const [r2, g2, b2] = await sharp(fixtures.inputJpgWithPortraitExif5, { ignoreIcc: false })
+    const [r2, g2, b2] = await sharp(fixtures.inputJpgWithPortraitExif5, {
+      ignoreIcc: false
+    })
       .extract({ width: 1, height: 1, top: 16, left: 16 })
       .raw()
       .toBuffer();
 
-    t.assert.deepStrictEqual({ r1, g1, b1, r2, g2, b2 }, {
-      r1: 60,
-      r2: 77,
-      g1: 54,
-      g2: 69,
-      b1: 20,
-      b2: 25
-    });
+    t.assert.deepStrictEqual(
+      { r1, g1, b1, r2, g2, b2 },
+      {
+        r1: 60,
+        r2: 77,
+        g1: 54,
+        g2: 69,
+        b1: 20,
+        b2: 25
+      }
+    );
   });
 
   suite('Switch off safety limits for certain formats', () => {
@@ -726,7 +766,9 @@ suite('Input/output', () => {
 
     test('Invalid fails - integer overflow', (t) => {
       t.plan(1);
-      t.assert.throws(() => sharp({ limitInputPixels: Number.MAX_SAFE_INTEGER + 1 }));
+      t.assert.throws(() =>
+        sharp({ limitInputPixels: Number.MAX_SAFE_INTEGER + 1 })
+      );
     });
 
     test('Invalid fails - string', (t) => {
@@ -737,7 +779,9 @@ suite('Input/output', () => {
     test('Same size as input works', async (t) => {
       t.plan(1);
       const { width, height } = await sharp(fixtures.inputJpg).metadata();
-      const data = await sharp(fixtures.inputJpg, { limitInputPixels: width * height })
+      const data = await sharp(fixtures.inputJpg, {
+        limitInputPixels: width * height
+      })
         .resize(2)
         .toBuffer();
       t.assert.strictEqual(true, data.length > 0);
@@ -745,7 +789,9 @@ suite('Input/output', () => {
 
     test('Disabling limit works', async (t) => {
       t.plan(1);
-      const data = await sharp(fixtures.inputJpgLarge, { limitInputPixels: false })
+      const data = await sharp(fixtures.inputJpgLarge, {
+        limitInputPixels: false
+      })
         .resize(2)
         .toBuffer();
       t.assert.strictEqual(true, data.length > 0);
@@ -754,7 +800,8 @@ suite('Input/output', () => {
     test('Enabling default limit works and fails with a large image', async (t) => {
       t.plan(1);
       await t.assert.rejects(
-        () => sharp(fixtures.inputJpgLarge, { limitInputPixels: true }).toBuffer(),
+        () =>
+          sharp(fixtures.inputJpgLarge, { limitInputPixels: true }).toBuffer(),
         /Input image exceeds pixel limit/
       );
     });
@@ -762,7 +809,10 @@ suite('Input/output', () => {
     test('Enabling default limit works and fails for an image with resolution higher than uint32 limit', async (t) => {
       t.plan(1);
       await t.assert.rejects(
-        () => sharp(fixtures.inputPngUint32Limit, { limitInputPixels: true }).toBuffer(),
+        () =>
+          sharp(fixtures.inputPngUint32Limit, {
+            limitInputPixels: true
+          }).toBuffer(),
         /Input image exceeds pixel limit/
       );
     });
@@ -771,7 +821,10 @@ suite('Input/output', () => {
       t.plan(1);
       const { width, height } = await sharp(fixtures.inputJpg).metadata();
       await t.assert.rejects(
-        () => sharp(fixtures.inputJpg, { limitInputPixels: width * height - 1 }).toBuffer(),
+        () =>
+          sharp(fixtures.inputJpg, {
+            limitInputPixels: width * height - 1
+          }).toBuffer(),
         /Input image exceeds pixel limit/
       );
     });
@@ -820,7 +873,9 @@ suite('Input/output', () => {
     test('Same number of channels as input works', async (t) => {
       t.plan(1);
       const { channels } = await sharp(fixtures.inputJpg).metadata();
-      const data = await sharp(fixtures.inputJpg, { limitInputChannels: channels })
+      const data = await sharp(fixtures.inputJpg, {
+        limitInputChannels: channels
+      })
         .resize(2)
         .toBuffer();
       t.assert.strictEqual(true, data.length > 0);
@@ -856,7 +911,10 @@ suite('Input/output', () => {
       t.plan(1);
       const { channels } = await sharp(fixtures.inputJpg).metadata();
       await t.assert.rejects(
-        () => sharp(fixtures.inputJpg, { limitInputChannels: channels - 1 }).toBuffer(),
+        () =>
+          sharp(fixtures.inputJpg, {
+            limitInputChannels: channels - 1
+          }).toBuffer(),
         /Input image exceeds channel limit/
       );
     });
@@ -1133,9 +1191,7 @@ suite('Input/output', () => {
       eventCounter++;
     };
     sharp.queue.on('change', queueListener);
-    await sharp(fixtures.inputJpg)
-      .resize(320, 240)
-      .toBuffer();
+    await sharp(fixtures.inputJpg).resize(320, 240).toBuffer();
     await new Promise((resolve) => process.nextTick(resolve));
     sharp.queue.removeListener('change', queueListener);
     t.assert.strictEqual(2, eventCounter);
@@ -1152,7 +1208,9 @@ suite('Input/output', () => {
         t.assert.strictEqual(472, info.height);
         t.assert.strictEqual(3, info.channels);
       });
-    const badPipeline = sharp({ raw: { width: 840, height: 500, channels: 3 } }).toFormat('jpeg');
+    const badPipeline = sharp({
+      raw: { width: 840, height: 500, channels: 3 }
+    }).toFormat('jpeg');
     readable.pipe(inPipeline).pipe(badPipeline);
     await t.assert.rejects(
       () => badPipeline.toBuffer(),
@@ -1171,7 +1229,8 @@ suite('Input/output', () => {
     };
     await sharp({ create }).toFile(filename);
 
-    const { width, height, channels, format } = await sharp(filename).metadata();
+    const { width, height, channels, format } =
+      await sharp(filename).metadata();
     t.assert.strictEqual(width, 8);
     t.assert.strictEqual(height, 8);
     t.assert.strictEqual(channels, 3);
@@ -1183,7 +1242,9 @@ suite('Input/output', () => {
       .resize({ width: 8, height: 8 })
       .toBuffer();
 
-    t.plan(isMarkedAsUntransferable && buildPlatformArch() !== 'wasm32' ? 3 : 2);
+    t.plan(
+      isMarkedAsUntransferable && buildPlatformArch() !== 'wasm32' ? 3 : 2
+    );
     if (isMarkedAsUntransferable && buildPlatformArch() !== 'wasm32') {
       t.assert.strictEqual(isMarkedAsUntransferable(data.buffer), true);
     }
@@ -1206,8 +1267,8 @@ suite('Input/output', () => {
     t.assert.strictEqual(info.width, 8);
     t.assert.strictEqual(info.height, 8);
     t.assert.strictEqual(data.byteLength, info.size);
-    t.assert.strictEqual(data[0], 0xFF);
-    t.assert.strictEqual(data[1], 0xD8);
+    t.assert.strictEqual(data[0], 0xff);
+    t.assert.strictEqual(data[1], 0xd8);
 
     const metadata = await sharp(data).metadata();
     t.assert.strictEqual(metadata.format, 'jpeg');

@@ -39,27 +39,26 @@ const blueRect = {
   }
 };
 
-const blends = [
-  'over',
-  'xor',
-  'saturate',
-  'dest-over'
-];
+const blends = ['over', 'xor', 'saturate', 'dest-over'];
 
 suite('composite', () => {
-  blends.forEach(blend => {
+  blends.forEach((blend) => {
     test(`blend ${blend}`, async (t) => {
       t.plan(1);
       const filename = `composite.blend.${blend}.png`;
       const actual = fixtures.path(`output.${filename}`);
       const expected = fixtures.expected(filename);
       await sharp(redRect)
-        .composite([{
-          input: blueRect,
-          blend
-        }])
+        .composite([
+          {
+            input: blueRect,
+            blend
+          }
+        ])
         .toFile(actual);
-      await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(actual, expected));
+      await t.assert.doesNotThrow(() =>
+        fixtures.assertMaxColourDistance(actual, expected)
+      );
     });
   });
 
@@ -71,15 +70,19 @@ suite('composite', () => {
     const actual = fixtures.path(`output.true.${filename}`);
     const expected = fixtures.expected(`expected.true.${filename}`);
     await sharp(below)
-      .composite([{
-        input: above,
-        blend: 'color-burn',
-        top: 0,
-        left: 0,
-        premultiplied: true
-      }])
+      .composite([
+        {
+          input: above,
+          blend: 'color-burn',
+          top: 0,
+          left: 0,
+          premultiplied: true
+        }
+      ])
       .toFile(actual);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(actual, expected));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(actual, expected)
+    );
   });
 
   test('premultiplied false', async (t) => {
@@ -90,15 +93,19 @@ suite('composite', () => {
     const actual = fixtures.path(`output.false.${filename}`);
     const expected = fixtures.expected(`expected.false.${filename}`);
     await sharp(below)
-      .composite([{
-        input: above,
-        blend: 'color-burn',
-        top: 0,
-        left: 0,
-        premultiplied: false
-      }])
+      .composite([
+        {
+          input: above,
+          blend: 'color-burn',
+          top: 0,
+          left: 0,
+          premultiplied: false
+        }
+      ])
       .toFile(actual);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(actual, expected));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(actual, expected)
+    );
   });
 
   test('premultiplied absent', async (t) => {
@@ -109,14 +116,18 @@ suite('composite', () => {
     const actual = fixtures.path(`output.absent.${filename}`);
     const expected = fixtures.expected(`expected.absent.${filename}`);
     await sharp(below)
-      .composite([{
-        input: above,
-        blend: 'color-burn',
-        top: 0,
-        left: 0
-      }])
+      .composite([
+        {
+          input: above,
+          blend: 'color-burn',
+          top: 0,
+          left: 0
+        }
+      ])
       .toFile(actual);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(actual, expected));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(actual, expected)
+    );
   });
 
   test('scrgb pipeline', async (t) => {
@@ -126,16 +137,23 @@ suite('composite', () => {
     const expected = fixtures.expected(filename);
     await sharp({
       create: {
-        width: 32, height: 32, channels: 4, background: red
+        width: 32,
+        height: 32,
+        channels: 4,
+        background: red
       }
     })
       .pipelineColourspace('scrgb')
-      .composite([{
-        input: fixtures.inputPngWithTransparency16bit,
-        blend: 'color-burn'
-      }])
+      .composite([
+        {
+          input: fixtures.inputPngWithTransparency16bit,
+          blend: 'color-burn'
+        }
+      ])
       .toFile(actual);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(actual, expected));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(actual, expected)
+    );
   });
 
   test('multiple', async (t) => {
@@ -144,113 +162,159 @@ suite('composite', () => {
     const actual = fixtures.path(`output.${filename}`);
     const expected = fixtures.expected(filename);
     await sharp(redRect)
-      .composite([{
-        input: blueRect,
-        gravity: 'northeast'
-      }, {
-        input: greenRect,
-        gravity: 'southwest'
-      }])
+      .composite([
+        {
+          input: blueRect,
+          gravity: 'northeast'
+        },
+        {
+          input: greenRect,
+          gravity: 'southwest'
+        }
+      ])
       .toFile(actual);
-    await t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(actual, expected));
+    await t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(actual, expected)
+    );
   });
 
   test('autoOrient', async (t) => {
     t.plan(1);
     const data = await sharp({
       create: {
-        width: 600, height: 600, channels: 4, background: { ...red, alpha: 1 }
+        width: 600,
+        height: 600,
+        channels: 4,
+        background: { ...red, alpha: 1 }
       }
     })
-      .composite([{
-        input: fixtures.inputJpgWithExif,
-        autoOrient: true
-      }])
+      .composite([
+        {
+          input: fixtures.inputJpgWithExif,
+          autoOrient: true
+        }
+      ])
       .jpeg()
       .toBuffer();
 
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('composite-autoOrient.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('composite-autoOrient.jpg'),
+        data
+      )
+    );
   });
 
   test('zero offset', async (t) => {
     t.plan(3);
     const { data, info } = await sharp(fixtures.inputJpg)
       .resize(80)
-      .composite([{
-        input: fixtures.inputPngWithTransparency16bit,
-        top: 0,
-        left: 0
-      }])
+      .composite([
+        {
+          input: fixtures.inputPngWithTransparency16bit,
+          top: 0,
+          left: 0
+        }
+      ])
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(3, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('overlay-offset-0.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('overlay-offset-0.jpg'), data)
+    );
   });
 
   test('offset and gravity', async (t) => {
     t.plan(3);
     const { data, info } = await sharp(fixtures.inputJpg)
       .resize(80)
-      .composite([{
-        input: fixtures.inputPngWithTransparency16bit,
-        left: 10,
-        top: 10,
-        gravity: 4
-      }])
+      .composite([
+        {
+          input: fixtures.inputPngWithTransparency16bit,
+          left: 10,
+          top: 10,
+          gravity: 4
+        }
+      ])
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(3, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('overlay-offset-with-gravity.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('overlay-offset-with-gravity.jpg'),
+        data
+      )
+    );
   });
 
   test('negative offset and gravity', async (t) => {
     t.plan(3);
     const { data, info } = await sharp(fixtures.inputJpg)
       .resize(400)
-      .composite([{
-        input: fixtures.inputPngWithTransparency16bit,
-        left: -10,
-        top: -10,
-        gravity: 4
-      }])
+      .composite([
+        {
+          input: fixtures.inputPngWithTransparency16bit,
+          left: -10,
+          top: -10,
+          gravity: 4
+        }
+      ])
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(3, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(
-      fixtures.expected('overlay-negative-offset-with-gravity.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('overlay-negative-offset-with-gravity.jpg'),
+        data
+      )
+    );
   });
 
   test('offset, gravity and tile', async (t) => {
     t.plan(3);
     const { data, info } = await sharp(fixtures.inputJpg)
       .resize(80)
-      .composite([{
-        input: fixtures.inputPngWithTransparency16bit,
-        left: 10,
-        top: 10,
-        gravity: 4,
-        tile: true
-      }])
+      .composite([
+        {
+          input: fixtures.inputPngWithTransparency16bit,
+          left: 10,
+          top: 10,
+          gravity: 4,
+          tile: true
+        }
+      ])
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(3, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('overlay-offset-with-gravity-tile.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('overlay-offset-with-gravity-tile.jpg'),
+        data
+      )
+    );
   });
 
   test('offset and tile', async (t) => {
     t.plan(3);
     const { data, info } = await sharp(fixtures.inputJpg)
       .resize(80)
-      .composite([{
-        input: fixtures.inputPngWithTransparency16bit,
-        left: 10,
-        top: 10,
-        tile: true
-      }])
+      .composite([
+        {
+          input: fixtures.inputPngWithTransparency16bit,
+          left: 10,
+          top: 10,
+          tile: true
+        }
+      ])
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('jpeg', info.format);
     t.assert.strictEqual(3, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('overlay-offset-with-tile.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        fixtures.expected('overlay-offset-with-tile.jpg'),
+        data
+      )
+    );
   });
 
   test('centre gravity should replicate correct number of tiles', async (t) => {
@@ -258,14 +322,19 @@ suite('composite', () => {
     const red = { r: 255, g: 0, b: 0 };
     const [r, g, b] = await sharp({
       create: {
-        width: 40, height: 40, channels: 4, background: red
+        width: 40,
+        height: 40,
+        channels: 4,
+        background: red
       }
     })
-      .composite([{
-        input: fixtures.inputPngWithTransparency16bit,
-        gravity: 'centre',
-        tile: true
-      }])
+      .composite([
+        {
+          input: fixtures.inputPngWithTransparency16bit,
+          gravity: 'centre',
+          tile: true
+        }
+      ])
       .raw()
       .toBuffer();
 
@@ -276,80 +345,103 @@ suite('composite', () => {
     t.plan(5);
     const { data, info } = await sharp(fixtures.inputJpg)
       .resize(300, 300)
-      .composite([{
-        input: Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect x="0" y="0" width="200" height="200" rx="50" ry="50"/></svg>'),
-        density: 96,
-        blend: 'dest-in',
-        cutout: true
-      }])
+      .composite([
+        {
+          input: Buffer.from(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect x="0" y="0" width="200" height="200" rx="50" ry="50"/></svg>'
+          ),
+          density: 96,
+          blend: 'dest-in',
+          cutout: true
+        }
+      ])
       .png()
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual('png', info.format);
     t.assert.strictEqual(300, info.width);
     t.assert.strictEqual(300, info.height);
     t.assert.strictEqual(4, info.channels);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('composite-cutout.png'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('composite-cutout.png'), data)
+    );
   });
 
   suite('numeric gravity', () => {
-    Object.keys(sharp.gravity).forEach(gravity => {
+    Object.keys(sharp.gravity).forEach((gravity) => {
       test(gravity, async (t) => {
         t.plan(5);
         const { data, info } = await sharp(fixtures.inputJpg)
           .resize(80)
-          .composite([{
-            input: fixtures.inputPngWithTransparency16bit,
-            gravity
-          }])
+          .composite([
+            {
+              input: fixtures.inputPngWithTransparency16bit,
+              gravity
+            }
+          ])
           .toBuffer({ resolveWithObject: true });
         t.assert.strictEqual('jpeg', info.format);
         t.assert.strictEqual(80, info.width);
         t.assert.strictEqual(65, info.height);
         t.assert.strictEqual(3, info.channels);
-        await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected(`overlay-gravity-${gravity}.jpg`), data));
+        await t.assert.doesNotReject(() =>
+          fixtures.assertSimilar(
+            fixtures.expected(`overlay-gravity-${gravity}.jpg`),
+            data
+          )
+        );
       });
     });
   });
 
   suite('string gravity', () => {
-    Object.keys(sharp.gravity).forEach(gravity => {
+    Object.keys(sharp.gravity).forEach((gravity) => {
       test(gravity, async (t) => {
         t.plan(5);
         const expected = fixtures.expected(`overlay-gravity-${gravity}.jpg`);
         const { data, info } = await sharp(fixtures.inputJpg)
           .resize(80)
-          .composite([{
-            input: fixtures.inputPngWithTransparency16bit,
-            gravity: sharp.gravity[gravity]
-          }])
+          .composite([
+            {
+              input: fixtures.inputPngWithTransparency16bit,
+              gravity: sharp.gravity[gravity]
+            }
+          ])
           .toBuffer({ resolveWithObject: true });
         t.assert.strictEqual('jpeg', info.format);
         t.assert.strictEqual(80, info.width);
         t.assert.strictEqual(65, info.height);
         t.assert.strictEqual(3, info.channels);
-        await t.assert.doesNotReject(() => fixtures.assertSimilar(expected, data));
+        await t.assert.doesNotReject(() =>
+          fixtures.assertSimilar(expected, data)
+        );
       });
     });
   });
 
   suite('tile and gravity', () => {
-    Object.keys(sharp.gravity).forEach(gravity => {
+    Object.keys(sharp.gravity).forEach((gravity) => {
       test(gravity, async (t) => {
         t.plan(5);
-        const expected = fixtures.expected(`overlay-tile-gravity-${gravity}.jpg`);
+        const expected = fixtures.expected(
+          `overlay-tile-gravity-${gravity}.jpg`
+        );
         const { data, info } = await sharp(fixtures.inputJpg)
           .resize(80)
-          .composite([{
-            input: fixtures.inputPngWithTransparency16bit,
-            tile: true,
-            gravity
-          }])
+          .composite([
+            {
+              input: fixtures.inputPngWithTransparency16bit,
+              tile: true,
+              gravity
+            }
+          ])
           .toBuffer({ resolveWithObject: true });
         t.assert.strictEqual('jpeg', info.format);
         t.assert.strictEqual(80, info.width);
         t.assert.strictEqual(65, info.height);
         t.assert.strictEqual(3, info.channels);
-        await t.assert.doesNotReject(() => fixtures.assertSimilar(expected, data));
+        await t.assert.doesNotReject(() =>
+          fixtures.assertSimilar(expected, data)
+        );
       });
     });
   });
@@ -450,12 +542,18 @@ suite('composite', () => {
     const red = { r: 255, g: 0, b: 0 };
     const blue = { r: 0, g: 0, b: 255 };
 
-    const [r, g, b] = await sharp({ create: { width: 2, height: 2, channels: 4, background: red } })
-      .composite([{
-        input: { create: { width: 2, height: 2, channels: 4, background: blue } },
-        top: 1,
-        left: 1
-      }])
+    const [r, g, b] = await sharp({
+      create: { width: 2, height: 2, channels: 4, background: red }
+    })
+      .composite([
+        {
+          input: {
+            create: { width: 2, height: 2, channels: 4, background: blue }
+          },
+          top: 1,
+          left: 1
+        }
+      ])
       .raw()
       .toBuffer();
 
@@ -466,7 +564,10 @@ suite('composite', () => {
     t.plan(2);
     const { info } = await sharp({
       create: {
-        width: 41, height: 41, channels: 3, background: 'red'
+        width: 41,
+        height: 41,
+        channels: 3,
+        background: 'red'
       }
     })
       .resize({
@@ -478,7 +579,10 @@ suite('composite', () => {
         {
           input: {
             create: {
-              width: 16, height: 16, channels: 3, background: 'green'
+              width: 16,
+              height: 16,
+              channels: 3,
+              background: 'green'
             }
           },
           tile: true
@@ -494,16 +598,21 @@ suite('composite', () => {
     t.plan(4);
     const [r, g, b, a] = await sharp({
       create: {
-        width: 1, height: 1, channels: 4, background: 'saddlebrown'
+        width: 1,
+        height: 1,
+        channels: 4,
+        background: 'saddlebrown'
       }
     })
       .resize({ width: 8 })
-      .composite([{
-        input: Buffer.from([255, 255, 255, 128]),
-        raw: { width: 1, height: 1, channels: 4 },
-        tile: true,
-        blend: 'dest-in'
-      }])
+      .composite([
+        {
+          input: Buffer.from([255, 255, 255, 128]),
+          raw: { width: 1, height: 1, channels: 4 },
+          tile: true,
+          blend: 'dest-in'
+        }
+      ])
       .raw()
       .toBuffer();
 
@@ -517,7 +626,10 @@ suite('composite', () => {
     t.plan(2);
     const tile = await sharp({
       create: {
-        width: 8, height: 513, channels: 3, background: 'red'
+        width: 8,
+        height: 513,
+        channels: 3,
+        background: 'red'
       }
     })
       .png({ compressionLevel: 0 })
@@ -525,13 +637,18 @@ suite('composite', () => {
 
     const { info } = await sharp({
       create: {
-        width: 8, height: 514, channels: 3, background: 'green'
+        width: 8,
+        height: 514,
+        channels: 3,
+        background: 'green'
       }
     })
-      .composite([{
-        input: tile,
-        tile: true
-      }])
+      .composite([
+        {
+          input: tile,
+          tile: true
+        }
+      ])
       .toBuffer({ resolveWithObject: true });
 
     t.assert.strictEqual(info.width, 8);

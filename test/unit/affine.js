@@ -13,71 +13,98 @@ suite('Affine transform', () => {
     test('Missing matrix', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine();
+        sharp(fixtures.inputJpg).affine();
       });
     });
     test('Invalid 1d matrix', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine(['123', 123, 123, 123]);
+        sharp(fixtures.inputJpg).affine(['123', 123, 123, 123]);
       });
     });
     test('Invalid 2d matrix', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine([[123, 123], [null, 123]]);
+        sharp(fixtures.inputJpg).affine([
+          [123, 123],
+          [null, 123]
+        ]);
       });
     });
     test('Invalid options parameter type', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine([[1, 0], [0, 1]], 'invalid options type');
+        sharp(fixtures.inputJpg).affine(
+          [
+            [1, 0],
+            [0, 1]
+          ],
+          'invalid options type'
+        );
       });
     });
     test('Invalid background color', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine([4, 4, 4, 4], { background: 'not a color' });
+        sharp(fixtures.inputJpg).affine([4, 4, 4, 4], {
+          background: 'not a color'
+        });
       });
     });
     test('Invalid idx offset type', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine([[4, 4], [4, 4]], { idx: 'invalid idx type' });
+        sharp(fixtures.inputJpg).affine(
+          [
+            [4, 4],
+            [4, 4]
+          ],
+          { idx: 'invalid idx type' }
+        );
       });
     });
     test('Invalid idy offset type', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine([4, 4, 4, 4], { idy: 'invalid idy type' });
+        sharp(fixtures.inputJpg).affine([4, 4, 4, 4], {
+          idy: 'invalid idy type'
+        });
       });
     });
     test('Invalid odx offset type', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine([[4, 4], [4, 4]], { odx: 'invalid odx type' });
+        sharp(fixtures.inputJpg).affine(
+          [
+            [4, 4],
+            [4, 4]
+          ],
+          { odx: 'invalid odx type' }
+        );
       });
     });
     test('Invalid ody offset type', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine([[4, 4], [4, 4]], { ody: 'invalid ody type' });
+        sharp(fixtures.inputJpg).affine(
+          [
+            [4, 4],
+            [4, 4]
+          ],
+          { ody: 'invalid ody type' }
+        );
       });
     });
     test('Invalid interpolator', (t) => {
       t.plan(1);
       t.assert.throws(() => {
-        sharp(fixtures.inputJpg)
-          .affine([[4, 4], [4, 4]], { interpolator: 'cubic' });
+        sharp(fixtures.inputJpg).affine(
+          [
+            [4, 4],
+            [4, 4]
+          ],
+          { interpolator: 'cubic' }
+        );
       });
     });
   });
@@ -85,7 +112,10 @@ suite('Affine transform', () => {
     t.plan(1);
     const input = fixtures.inputJpg;
     const data = await sharp(input)
-      .affine([[1, 0], [0, 1]])
+      .affine([
+        [1, 0],
+        [0, 1]
+      ])
       .toBuffer();
     await t.assert.doesNotReject(() => fixtures.assertSimilar(input, data));
   });
@@ -95,7 +125,10 @@ suite('Affine transform', () => {
     const inputWidth = 2725;
     const inputHeight = 2225;
     const { data, info } = await sharp(input)
-      .affine([[0.2, 0], [0, 1.5]])
+      .affine([
+        [0.2, 0],
+        [0, 1.5]
+      ])
       .toBuffer({ resolveWithObject: true });
     await t.assert.doesNotReject(() => fixtures.assertSimilar(input, data));
     t.assert.strictEqual(info.width, Math.ceil(inputWidth * 0.2));
@@ -106,9 +139,17 @@ suite('Affine transform', () => {
     const input = fixtures.inputJpg;
     const data = await sharp(input)
       .resize(500, 500)
-      .affine([[0.5, 1], [1, 0.5]])
+      .affine([
+        [0.5, 1],
+        [1, 0.5]
+      ])
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(data, fixtures.expected('affine-resize-expected.jpg')));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        data,
+        fixtures.expected('affine-resize-expected.jpg')
+      )
+    );
   });
   test('Extracts and applies affine transform', async (t) => {
     t.plan(1);
@@ -116,57 +157,116 @@ suite('Affine transform', () => {
       .extract({ left: 300, top: 300, width: 600, height: 600 })
       .affine([0.3, 0, -0.5, 0.3])
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(data, fixtures.expected('affine-extract-expected.jpg')));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        data,
+        fixtures.expected('affine-extract-expected.jpg')
+      )
+    );
   });
   test('Rotates and applies affine transform', async (t) => {
     t.plan(1);
     const data = await sharp(fixtures.inputJpg320x240)
       .rotate(90)
-      .affine([[-1.2, 0], [0, -1.2]])
+      .affine([
+        [-1.2, 0],
+        [0, -1.2]
+      ])
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(data, fixtures.expected('affine-rotate-expected.jpg')));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        data,
+        fixtures.expected('affine-rotate-expected.jpg')
+      )
+    );
   });
   test('Extracts, rotates and applies affine transform', async (t) => {
     t.plan(1);
     const data = await sharp(fixtures.inputJpg)
       .extract({ left: 1000, top: 1000, width: 200, height: 200 })
       .rotate(45, { background: 'blue' })
-      .affine([[2, 1], [2, -0.5]], { background: 'red' })
+      .affine(
+        [
+          [2, 1],
+          [2, -0.5]
+        ],
+        { background: 'red' }
+      )
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(data, fixtures.expected('affine-extract-rotate-expected.jpg')));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        data,
+        fixtures.expected('affine-extract-rotate-expected.jpg')
+      )
+    );
   });
   test('Applies affine transform with background color', async (t) => {
     t.plan(1);
     const data = await sharp(fixtures.inputJpg320x240)
       .rotate(180)
-      .affine([[-1.5, 1.2], [-1, 1]], { background: 'red' })
+      .affine(
+        [
+          [-1.5, 1.2],
+          [-1, 1]
+        ],
+        { background: 'red' }
+      )
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(data, fixtures.expected('affine-background-expected.jpg')));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        data,
+        fixtures.expected('affine-background-expected.jpg')
+      )
+    );
   });
   test('Applies affine transform with background color and output offsets', async (t) => {
     t.plan(1);
     const data = await sharp(fixtures.inputJpg320x240)
       .rotate(180)
-      .affine([[-2, 1.5], [-1, 2]], { background: 'blue', odx: 40, ody: -100 })
+      .affine(
+        [
+          [-2, 1.5],
+          [-1, 2]
+        ],
+        { background: 'blue', odx: 40, ody: -100 }
+      )
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(data, fixtures.expected('affine-background-output-offsets-expected.jpg')));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        data,
+        fixtures.expected('affine-background-output-offsets-expected.jpg')
+      )
+    );
   });
   test('Applies affine transform with background color and all offsets', async (t) => {
     t.plan(1);
     const data = await sharp(fixtures.inputJpg320x240)
       .rotate(180)
-      .affine([[-1.2, 1.8], [-1, 2]], { background: 'yellow', idx: 10, idy: -40, odx: 10, ody: -50 })
+      .affine(
+        [
+          [-1.2, 1.8],
+          [-1, 2]
+        ],
+        { background: 'yellow', idx: 10, idy: -40, odx: 10, ody: -50 }
+      )
       .toBuffer();
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(data, fixtures.expected('affine-background-all-offsets-expected.jpg')));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(
+        data,
+        fixtures.expected('affine-background-all-offsets-expected.jpg')
+      )
+    );
   });
 
   test('Animated image rejects', async (t) => {
     t.plan(1);
-    await t.assert.rejects(() => sharp(fixtures.inputGifAnimated, { animated: true })
-      .affine([1, 1, 1, 1])
-      .toBuffer(),
-    /Affine is not supported for multi-page images/
-    )
+    await t.assert.rejects(
+      () =>
+        sharp(fixtures.inputGifAnimated, { animated: true })
+          .affine([1, 1, 1, 1])
+          .toBuffer(),
+      /Affine is not supported for multi-page images/
+    );
   });
 
   suite('Interpolations', () => {
@@ -177,11 +277,24 @@ suite('Affine transform', () => {
       test(`Performs 2x upscale with ${interp} interpolation`, async (t) => {
         t.plan(3);
         const { data, info } = await sharp(input)
-          .affine([[2, 0], [0, 2]], { interpolator: sharp.interpolators[interp] })
+          .affine(
+            [
+              [2, 0],
+              [0, 2]
+            ],
+            { interpolator: sharp.interpolators[interp] }
+          )
           .toBuffer({ resolveWithObject: true });
         t.assert.strictEqual(info.width, Math.ceil(inputWidth * 2));
         t.assert.strictEqual(info.height, Math.ceil(inputHeight * 2));
-        await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected(`affine-${sharp.interpolators[interp]}-2x-upscale-expected.jpg`), data));
+        await t.assert.doesNotReject(() =>
+          fixtures.assertSimilar(
+            fixtures.expected(
+              `affine-${sharp.interpolators[interp]}-2x-upscale-expected.jpg`
+            ),
+            data
+          )
+        );
       });
     }
   });

@@ -7,7 +7,7 @@ const {
   useGlobalLibvips,
   globalLibvipsVersion,
   log,
-  spawnRebuild,
+  spawnRebuild
 } = require('../dist/libvips.cjs');
 
 log('Building from source');

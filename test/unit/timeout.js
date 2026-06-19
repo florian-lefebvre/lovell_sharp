@@ -12,10 +12,8 @@ suite('Timeout', () => {
   test('Will timeout after 1s when performing slow blur operation', async (t) => {
     t.plan(1);
     await t.assert.rejects(
-      () => sharp(fixtures.inputJpg)
-        .blur(300)
-        .timeout({ seconds: 1 })
-        .toBuffer(),
+      () =>
+        sharp(fixtures.inputJpg).blur(300).timeout({ seconds: 1 }).toBuffer(),
       /timeout: [0-9]+% complete/
     );
   });

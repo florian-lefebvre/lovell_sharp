@@ -21,7 +21,9 @@ const restorePlatform = () => {
 
 suite('libvips binaries', () => {
   suite('Windows platform', () => {
-    before(() => { setPlatform('win32'); });
+    before(() => {
+      setPlatform('win32');
+    });
     after(restorePlatform);
 
     test('pkgConfigPath returns empty string', (t) => {
@@ -39,7 +41,9 @@ suite('libvips binaries', () => {
   });
 
   suite('non-Windows platforms', () => {
-    before(() => { setPlatform('linux'); });
+    before(() => {
+      setPlatform('linux');
+    });
     after(restorePlatform);
 
     test('pkgConfigPath returns a string', (t) => {
@@ -84,7 +88,10 @@ suite('libvips binaries', () => {
 
       let logged = false;
       const logger = (message) => {
-        t.assert.strictEqual(message, 'Detected SHARP_FORCE_GLOBAL_LIBVIPS, skipping search for globally-installed libvips');
+        t.assert.strictEqual(
+          message,
+          'Detected SHARP_FORCE_GLOBAL_LIBVIPS, skipping search for globally-installed libvips'
+        );
         logged = true;
       };
       const useGlobalLibvipsWithLogger = libvips.useGlobalLibvips(logger);
@@ -150,12 +157,18 @@ suite('libvips binaries', () => {
     test('platform', (t) => {
       t.plan(1);
       const [platform] = libvips.runtimePlatformArch().split('-');
-      t.assert.strictEqual(true, ['darwin', 'freebsd', 'linux', 'linuxmusl', 'win32'].includes(platform));
+      t.assert.strictEqual(
+        true,
+        ['darwin', 'freebsd', 'linux', 'linuxmusl', 'win32'].includes(platform)
+      );
     });
     test('arch', (t) => {
       t.plan(1);
       const [, arch] = libvips.runtimePlatformArch().split('-');
-      t.assert.strictEqual(true, ['arm', 'arm64', 'ia32', 'x64', 'ppc64'].includes(arch));
+      t.assert.strictEqual(
+        true,
+        ['arm', 'arm64', 'ia32', 'x64', 'ppc64'].includes(arch)
+      );
     });
     test('isUnsupportedNodeRuntime', (t) => {
       t.plan(1);

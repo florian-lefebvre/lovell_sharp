@@ -17,7 +17,9 @@ suite('Alpha transparency', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(400, info.width);
     t.assert.strictEqual(300, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('flatten-black.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('flatten-black.jpg'), data)
+    );
   });
 
   test('Flatten to RGB orange', async (t) => {
@@ -31,7 +33,9 @@ suite('Alpha transparency', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(400, info.width);
     t.assert.strictEqual(300, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('flatten-orange.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('flatten-orange.jpg'), data)
+    );
   });
 
   test('Flatten to CSS/hex orange', async (t) => {
@@ -43,7 +47,9 @@ suite('Alpha transparency', () => {
       .toBuffer({ resolveWithObject: true });
     t.assert.strictEqual(400, info.width);
     t.assert.strictEqual(300, info.height);
-    await t.assert.doesNotReject(() => fixtures.assertSimilar(fixtures.expected('flatten-orange.jpg'), data));
+    await t.assert.doesNotReject(() =>
+      fixtures.assertSimilar(fixtures.expected('flatten-orange.jpg'), data)
+    );
   });
 
   test('Flatten 16-bit PNG with transparency to orange', async (t) => {
@@ -57,7 +63,13 @@ suite('Alpha transparency', () => {
     t.assert.strictEqual(true, info.size > 0);
     t.assert.strictEqual(32, info.width);
     t.assert.strictEqual(32, info.height);
-    t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(output, fixtures.expected('flatten-rgb16-orange.jpg'), 10));
+    t.assert.doesNotThrow(() =>
+      fixtures.assertMaxColourDistance(
+        output,
+        fixtures.expected('flatten-rgb16-orange.jpg'),
+        10
+      )
+    );
   });
 
   test('Do not flatten', async (t) => {
@@ -101,7 +113,9 @@ suite('Alpha transparency', () => {
       .resize(2048, 1536)
       .toFile(actual)
       .then(() => {
-        t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(actual, expected, 102));
+        t.assert.doesNotThrow(() =>
+          fixtures.assertMaxColourDistance(actual, expected, 102)
+        );
       });
   });
 
@@ -114,45 +128,55 @@ suite('Alpha transparency', () => {
       .resize(1024, 768)
       .toFile(actual)
       .then(() => {
-        t.assert.doesNotThrow(() => fixtures.assertMaxColourDistance(actual, expected, 102));
+        t.assert.doesNotThrow(() =>
+          fixtures.assertMaxColourDistance(actual, expected, 102)
+        );
       });
   });
 
   test('Removes alpha from fixtures with transparency, ignores those without', async (t) => {
     t.plan(6);
-    await Promise.all([
-      fixtures.inputPngWithTransparency,
-      fixtures.inputPngWithTransparency16bit,
-      fixtures.inputWebPWithTransparency,
-      fixtures.inputJpg,
-      fixtures.inputPng,
-      fixtures.inputWebP
-    ].map((input) => sharp(input)
-        .resize(10)
-        .removeAlpha()
-        .toBuffer({ resolveWithObject: true })
-        .then((result) => {
-          t.assert.strictEqual(3, result.info.channels);
-        })));
+    await Promise.all(
+      [
+        fixtures.inputPngWithTransparency,
+        fixtures.inputPngWithTransparency16bit,
+        fixtures.inputWebPWithTransparency,
+        fixtures.inputJpg,
+        fixtures.inputPng,
+        fixtures.inputWebP
+      ].map((input) =>
+        sharp(input)
+          .resize(10)
+          .removeAlpha()
+          .toBuffer({ resolveWithObject: true })
+          .then((result) => {
+            t.assert.strictEqual(3, result.info.channels);
+          })
+      )
+    );
   });
 
   test('Ensures alpha from fixtures without transparency, ignores those with', async (t) => {
     t.plan(6);
-    await Promise.all([
-      fixtures.inputPngWithTransparency,
-      fixtures.inputPngWithTransparency16bit,
-      fixtures.inputWebPWithTransparency,
-      fixtures.inputJpg,
-      fixtures.inputPng,
-      fixtures.inputWebP
-    ].map((input) => sharp(input)
-        .resize(10)
-        .ensureAlpha()
-        .png()
-        .toBuffer({ resolveWithObject: true })
-        .then((result) => {
-          t.assert.strictEqual(4, result.info.channels);
-        })));
+    await Promise.all(
+      [
+        fixtures.inputPngWithTransparency,
+        fixtures.inputPngWithTransparency16bit,
+        fixtures.inputWebPWithTransparency,
+        fixtures.inputJpg,
+        fixtures.inputPng,
+        fixtures.inputWebP
+      ].map((input) =>
+        sharp(input)
+          .resize(10)
+          .ensureAlpha()
+          .png()
+          .toBuffer({ resolveWithObject: true })
+          .then((result) => {
+            t.assert.strictEqual(4, result.info.channels);
+          })
+      )
+    );
   });
 
   test('Valid ensureAlpha value used for alpha channel', async (t) => {
